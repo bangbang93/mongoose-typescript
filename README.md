@@ -1,3 +1,5 @@
+# mongoose-typescript
+Build mongoose schema with typescript and decorator
 ## Model level Decorators
 
 `@model(name: string, options?: SchemaOptions)`
@@ -8,9 +10,9 @@
 
 ## Schema level Decorators
 
-`@prop(options: SchemaTypeOpts<T> = {}, type?: T)`
+`@prop(options: SchemaTypeOpts<T> = {}, type?: T)` type is optional, mongoose-typescript will try to determined the type automatically
 
-`@array(type?: T, options?: SchemaTypeOpts<T>)`
+`@array(type?: T, options?: SchemaTypeOpts<T>)` because of typescript only mark the type as Array, so array field need set type manually, or using mixed
 
 `@id` empty decorator, just for emit Reflect metadata for `_id`
 
@@ -23,6 +25,8 @@
 `@unique` set schema `{unique: false}`
 
 `@type(type)` set schema `{type: type}`
+
+`@defaults(value)` set schema `{default: value}`
 
 `@ref(nameOrClass: string | IMongooseClass)` set schema `{ref: nameOrClass}`
 if type isn't set, and the argument is class, `mongoose-typescript` will try to using the typeof `class._id`, if cannot determined the type, using `mongoose.Types.ObjectId`

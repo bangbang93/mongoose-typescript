@@ -15,11 +15,12 @@
     "url": "git+https://github.com/bangbang93/mongoose-typescript.git"
   },
   "author": "bangbang93 <bangbang93@163.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/bangbang93/mongoose-typescript/issues"
   },
   "homepage": "https://github.com/bangbang93/mongoose-typescript#readme",
+  "keywords": ["mongoose", "typescript", "decrator"],
   "peerDependencies": {
     "mongoose": "*"
   },
