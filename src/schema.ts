@@ -1,4 +1,4 @@
-import {SchemaTypeOpts, Types} from 'mongoose'
+import {SchemaTypeOpts} from 'mongoose'
 import {getSchema} from './index'
 import {getMongooseMeta, IMongooseClass} from './meta'
 
@@ -55,7 +55,7 @@ export function type(type: any) {
   }
 }
 
-export function ref(nameOrClass: string | IMongooseClass) {
+export function ref(nameOrClass: string | IMongooseClass, idType?: any) {
   if (typeof nameOrClass === 'string') {
     return (target: any, name: string) => {
       getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ref}
@@ -64,8 +64,12 @@ export function ref(nameOrClass: string | IMongooseClass) {
     return (target: any, name: string) => {
       const field = getMongooseMeta(target).schema[name] || {}
       if (field.type === undefined) {
-        field.type = Reflect.getMetadata('design:type', nameOrClass.prototype, '_id') ||
-                     Types.ObjectId
+        const type = idType || Reflect.getMetadata('design:type', nameOrClass.prototype, '_id')
+        if (!type) {
+          throw new Error(`cannot get type for ref ${target.constructor.name}.${name} ` +
+                                   `to ${nameOrClass.constructor.name}._id`)
+        }
+        field.type = type
       }
       getMongooseMeta(target).schema[name] = {...field,
                                               ref: getMongooseMeta(nameOrClass.prototype).name}

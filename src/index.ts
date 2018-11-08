@@ -25,14 +25,15 @@ export function getSchema(modelClass: IMongooseClass): Schema {
   return schema
 }
 
-export function getModel<T extends IMongooseClass>(
-  modelClass: InstanceType<T>): ModelType<InstanceType<T>> & InstanceType<T> {
+export function getModel<T extends IMongooseClass>(modelClass: IMongooseClass)
+  : ModelType<InstanceType<T>> & InstanceType<T> {
 
   if (modelCache.has(modelClass)) {
     return modelCache.get(modelClass) as any
   }
   const meta = getMongooseMeta(modelClass.prototype)
-  const newModel = model(meta.name, buildSchema(meta))
+  if (!meta.name) throw new Error(`name not set for model ${modelClass.constructor.name}`)
+  const newModel = model(meta.name, getSchema(modelClass))
   modelCache.set(modelClass, newModel as any)
   return newModel as any
 }

@@ -1,6 +1,9 @@
 # mongoose-typescript
 Build mongoose schema with typescript and decorator
 
+## Before Usage
+make sure that both `experimentalDecorators` and `emitDecoratorMetadata` are set to true in tsconfig
+
 ## Example
 
 ```typescript
@@ -99,7 +102,7 @@ user.save()
 `@defaults(value)` set schema `{default: value}`
 
 `@ref(nameOrClass: string | IMongooseClass)` set schema `{ref: nameOrClass}`
-if type isn't set, and the argument is class, `mongoose-typescript` will try to using the typeof `class._id`, if cannot determined the type, using `mongoose.Types.ObjectId`
+if type isn't set, and the argument is class, `mongoose-typescript` will try to using the typeof `class._id`
 
 `@statics` register statics method
 
