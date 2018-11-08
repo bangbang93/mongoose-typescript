@@ -1,13 +1,14 @@
-import {Document, Model, model, Schema, Types} from 'mongoose'
+import {Document, model, Model as mongooseModel, Schema, Types} from 'mongoose'
 import 'reflect-metadata'
 
 import {ActionType, Fn, getMongooseMeta, HookType, IMongooseClass, MongooseMeta} from './meta'
 
 export * from './model'
 export * from './schema'
+export * from './model-helper'
 
 export type DocumentType<T> = T & Document
-export type ModelType<T> = Model<DocumentType<T>> & T
+export type ModelType<T> = mongooseModel<DocumentType<T>> & T
 export type Ref<T> = Types.ObjectId | DocumentType<T>
 
 const modelCache = new WeakMap<IMongooseClass, ModelType<IMongooseClass>>()

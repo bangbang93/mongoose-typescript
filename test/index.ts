@@ -2,7 +2,7 @@
 import * as mongoose from 'mongoose'
 import 'should'
 import {
-  array, DocumentType, getModel, hidden, id, index, indexed, methods, model, ModelType, prop, Ref, ref, required,
+  array, DocumentType, getModel, hidden, id, index, indexed, methods, Model, model, ModelType, prop, Ref, ref, required,
   statics, subModel, unique,
 } from '../src'
 
@@ -29,15 +29,21 @@ class User {
   @prop() @hidden public password: string
   @prop() @indexed public loginCount: number
   @array(Address) public addresses: Address[]
+
+  @methods
+  public addAddress(address: Address) {
+    this.addresses.push(address)
+    return this
+  }
 }
 type IUserDocument = DocumentType<User>
 type IUserModel = ModelType<User> & typeof User
 
 @model('organization')
 @index({user: 1, name: 1}, {unique: true})
-class Organization {
+class Organization extends Model<Organization> {
   @statics
-  public static async listByUser(this: IOrganizationModel, userId: string) {
+  public static async listByUser(userId: string) {
     return this.find({
       members: userId,
     })
@@ -50,11 +56,12 @@ class Organization {
   @array() @ref(User) public members: Array<Ref<User>>
 
   @methods
-  public async addMember(this: IOrganizationDocument, userId: mongoose.Types.ObjectId) {
+  public async addMember(userId: mongoose.Types.ObjectId) {
     this.members.push(userId)
     return this.save()
   }
 }
+// @ts-ignore
 type IOrganizationDocument = DocumentType<Organization>
 type IOrganizationModel = ModelType<Organization> & typeof Organization
 
@@ -80,7 +87,6 @@ describe('User', function (this) {
 
     await user.save().should
         .rejectedWith('user validation failed: addresses.0.province: Path `province` is required.')
-
   })
 })
 

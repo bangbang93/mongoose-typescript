@@ -1,11 +1,11 @@
 {
   "name": "mongoose-typescript",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf lib && tsc && cp -r src/model-helper lib",
     "doc": "typedoc --out docs src && touch docs/.nojekyll",
     "prepublishOnly": "npm run build",
     "test": "mocha --require ts-node/register/transpile-only test/index.ts"
@@ -20,7 +20,11 @@
     "url": "https://github.com/bangbang93/mongoose-typescript/issues"
   },
   "homepage": "https://github.com/bangbang93/mongoose-typescript#readme",
-  "keywords": ["mongoose", "typescript", "decrator"],
+  "keywords": [
+    "mongoose",
+    "typescript",
+    "decrator"
+  ],
   "peerDependencies": {
     "mongoose": "*"
   },
