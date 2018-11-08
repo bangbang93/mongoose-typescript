@@ -7,6 +7,8 @@ node_js:
   - "9"
   - "10"
 sudo: false
+services:
+  - mongodb
 script:
   - npm test
   - npm run doc
