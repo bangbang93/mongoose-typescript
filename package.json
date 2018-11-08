@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "doc": "typedoc --out doc src/index.ts",
+    "doc": "typedoc --out docs src && touch docs/.nojekyll",
     "prepublishOnly": "npm run build",
     "test": "mocha --require ts-node/register/transpile-only test/index.ts"
   },
