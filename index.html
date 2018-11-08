@@ -66,6 +66,71 @@
 			<div class="tsd-panel tsd-typography">
 				<h1 id="mongoose-typescript">mongoose-typescript</h1>
 				<p>Build mongoose schema with typescript and decorator</p>
+				<h2 id="example">Example</h2>
+				<pre><code class="language-typescript"><span class="hljs-meta">@subModel</span>()
+<span class="hljs-keyword">class</span> Address {
+  <span class="hljs-meta">@prop</span>() <span class="hljs-meta">@required</span> <span class="hljs-keyword">public</span> country: <span class="hljs-built_in">string</span>
+  <span class="hljs-meta">@prop</span>() <span class="hljs-meta">@required</span> <span class="hljs-keyword">public</span> province: <span class="hljs-built_in">string</span>
+  <span class="hljs-meta">@prop</span>() <span class="hljs-meta">@required</span> <span class="hljs-keyword">public</span> city: <span class="hljs-built_in">string</span>
+  <span class="hljs-meta">@prop</span>() <span class="hljs-meta">@required</span> <span class="hljs-keyword">public</span> address: <span class="hljs-built_in">string</span>
+}
+
+<span class="hljs-meta">@model</span>(<span class="hljs-string">'user'</span>)
+<span class="hljs-keyword">class</span> User {
+  <span class="hljs-meta">@statics</span>
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> findByName(<span class="hljs-keyword">this</span>: IUserModel, name: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;IUserDocument&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.findOne({username: name})
+  }
+
+  <span class="hljs-meta">@id</span> <span class="hljs-keyword">public</span> readonly _id: mongoose.Types.ObjectId
+
+  <span class="hljs-meta">@prop</span>() <span class="hljs-meta">@unique</span> <span class="hljs-meta">@required</span> <span class="hljs-keyword">public</span> username: <span class="hljs-built_in">string</span>
+  <span class="hljs-meta">@prop</span>() <span class="hljs-meta">@hidden</span> <span class="hljs-keyword">public</span> password: <span class="hljs-built_in">string</span>
+  <span class="hljs-meta">@prop</span>() <span class="hljs-meta">@indexed</span> <span class="hljs-keyword">public</span> loginCount: <span class="hljs-built_in">number</span>
+  <span class="hljs-meta">@array</span>(Address) <span class="hljs-keyword">public</span> addresses: Address[]
+}
+<span class="hljs-keyword">type</span> IUserDocument = DocumentType&lt;User&gt;
+<span class="hljs-keyword">type</span> IUserModel = ModelType&lt;User&gt; &amp; <span class="hljs-keyword">typeof</span> User
+
+<span class="hljs-meta">@model</span>(<span class="hljs-string">'organization'</span>)
+<span class="hljs-meta">@index</span>({user: <span class="hljs-number">1</span>, name: <span class="hljs-number">1</span>}, {unique: <span class="hljs-literal">true</span>})
+<span class="hljs-keyword">class</span> Organization {
+  <span class="hljs-meta">@statics</span>
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> listByUser(<span class="hljs-keyword">this</span>: IOrganizationModel, userId: <span class="hljs-built_in">string</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.find({
+      members: userId,
+    })
+  }
+
+  <span class="hljs-meta">@id</span> <span class="hljs-keyword">public</span> readonly _id: mongoose.Types.ObjectId
+
+  <span class="hljs-meta">@ref</span>(User) <span class="hljs-meta">@required</span> <span class="hljs-keyword">public</span> user: Ref&lt;User&gt;
+  <span class="hljs-meta">@prop</span>() <span class="hljs-meta">@unique</span> <span class="hljs-meta">@required</span> <span class="hljs-keyword">public</span> name: <span class="hljs-built_in">string</span>
+  <span class="hljs-meta">@array</span>() <span class="hljs-meta">@ref</span>(User) <span class="hljs-keyword">public</span> members: <span class="hljs-built_in">Array</span>&lt;Ref&lt;User&gt;&gt;
+
+  <span class="hljs-meta">@methods</span>
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> addMember(<span class="hljs-keyword">this</span>: IOrganizationDocument, userId: mongoose.Types.ObjectId) {
+    <span class="hljs-keyword">this</span>.members.push(userId)
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.save()
+  }
+}
+<span class="hljs-keyword">type</span> IOrganizationDocument = DocumentType&lt;Organization&gt;
+<span class="hljs-keyword">type</span> IOrganizationModel = ModelType&lt;Organization&gt; &amp; <span class="hljs-keyword">typeof</span> Organization
+
+<span class="hljs-keyword">const</span> UserModel = getModel(User)
+
+<span class="hljs-keyword">const</span> user = <span class="hljs-keyword">new</span> UserModel({
+  username: <span class="hljs-string">'abc'</span>,
+  password: <span class="hljs-string">'wow'</span>,
+  addresses: [{
+    country: <span class="hljs-string">'china'</span>,
+    provicne: <span class="hljs-string">'zhejiang'</span>,
+    city: <span class="hljs-string">'hangzhou'</span>,
+    address: <span class="hljs-string">'xihu'</span>,
+  }],
+})
+
+user.save()</code></pre>
 				<h2 id="model-level-decorators">Model level Decorators</h2>
 				<p><code>@model(name: string, options?: SchemaOptions)</code></p>
 				<p><code>@index(fields: IIndexArgs[&#39;fields&#39;], options?: IIndexArgs[&#39;options&#39;]</code></p>
