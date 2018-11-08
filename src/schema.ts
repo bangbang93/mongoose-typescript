@@ -2,7 +2,7 @@ import {SchemaTypeOpts, Types} from 'mongoose'
 import {getSchema} from './index'
 import {getMongooseMeta, IMongooseClass} from './meta'
 
-export function prop<T>(type?: T, options: SchemaTypeOpts<T> = {}): PropertyDecorator {
+export function prop<T>(options: SchemaTypeOpts<T> & {type?: T} = {}, type?: T): PropertyDecorator {
   return (target: any, name: string) => {
     if (!type) {
       type = Reflect.getMetadata('design:type', target, name)
@@ -43,6 +43,10 @@ export function hidden(target: any, name: string) {
 
 export function unique(target: any, name: string) {
   getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], unique: true}
+}
+
+export function defaults(target: any, name: string) {
+  getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], default: true}
 }
 
 export function type(type: any) {

@@ -8,7 +8,7 @@
 
 ## Schema level Decorators
 
-`@prop(type?: T, options: SchemaTypeOpts<T> = {})`
+`@prop(options: SchemaTypeOpts<T> = {}, type?: T)`
 
 `@array(type?: T, options?: SchemaTypeOpts<T>)`
 
