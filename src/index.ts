@@ -1,4 +1,4 @@
-import {Document, model, Model as mongooseModel, Schema, Types} from 'mongoose'
+import {Document, model, Model, Schema, Types} from 'mongoose'
 import 'reflect-metadata'
 
 import {ActionType, Fn, getMongooseMeta, HookType, IMongooseClass, MongooseMeta} from './meta'
@@ -7,14 +7,14 @@ export * from './model'
 export * from './schema'
 export * from './model-helper'
 
-export type DocumentType<T> = T & Document
-export type ModelType<T> = mongooseModel<DocumentType<T>> & T
+type DocumentType<T> = T & Document
+type ModelType<T> = Model<DocumentType<T>>
 export type Ref<T> = Types.ObjectId | DocumentType<T>
 
 const modelCache = new WeakMap<IMongooseClass, ModelType<IMongooseClass>>()
 const schemaCache = new WeakMap<MongooseMeta, Schema>()
 
-export function getSchema(modelClass: IMongooseClass): Schema {
+export function getSchema<T extends IMongooseClass>(modelClass: T): Schema {
   const meta = getMongooseMeta(modelClass.prototype)
   if (schemaCache.has(meta)) {
     return schemaCache.get(meta)
@@ -25,8 +25,7 @@ export function getSchema(modelClass: IMongooseClass): Schema {
   return schema
 }
 
-export function getModel<T extends IMongooseClass>(modelClass: IMongooseClass)
-  : ModelType<InstanceType<T>> & InstanceType<T> {
+export function getModel<T extends IMongooseClass>(modelClass: T): T {
 
   if (modelCache.has(modelClass)) {
     return modelCache.get(modelClass) as any

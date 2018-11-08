@@ -2,8 +2,8 @@
 import * as mongoose from 'mongoose'
 import 'should'
 import {
-  array, DocumentType, getModel, hidden, id, index, indexed, methods, Model, model, ModelType, prop, Ref, ref, required,
-  statics, subModel, unique,
+  array, getModel, hidden, id, index, indexed, methods, Model, model, prop, Ref, ref, required, statics, subModel,
+  unique,
 } from '../src'
 
 mongoose.connect('mongodb://localhost/test')
@@ -17,9 +17,9 @@ class Address {
 }
 
 @model('user')
-class User {
+class User extends Model<User> {
   @statics
-  public static async findByName(this: IUserModel, name: string): Promise<IUserDocument> {
+  public static async findByName(name: string): Promise<User> {
     return this.findOne({username: name})
   }
 
@@ -36,8 +36,6 @@ class User {
     return this
   }
 }
-type IUserDocument = DocumentType<User>
-type IUserModel = ModelType<User> & typeof User
 
 @model('organization')
 @index({user: 1, name: 1}, {unique: true})
@@ -61,12 +59,9 @@ class Organization extends Model<Organization> {
     return this.save()
   }
 }
-// @ts-ignore
-type IOrganizationDocument = DocumentType<Organization>
-type IOrganizationModel = ModelType<Organization> & typeof Organization
 
 describe('User', function (this) {
-  let UserModel: IUserModel
+  let UserModel: typeof User
   it('getModel', function (this) {
     UserModel = getModel(User)
     UserModel.should.hasOwnProperty('findByName')
@@ -91,7 +86,7 @@ describe('User', function (this) {
 })
 
 describe('organization', function (this) {
-  let OrganizationModel: IOrganizationModel
+  let OrganizationModel: typeof Organization
   it('getModel', function (this) {
     OrganizationModel = getModel(Organization)
     OrganizationModel.should.hasOwnProperty('listByUser')
