@@ -64,19 +64,22 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
+				<h1 id="mongoose-typescript">mongoose-typescript</h1>
+				<p>Build mongoose schema with typescript and decorator</p>
 				<h2 id="model-level-decorators">Model level Decorators</h2>
 				<p><code>@model(name: string, options?: SchemaOptions)</code></p>
 				<p><code>@index(fields: IIndexArgs[&#39;fields&#39;], options?: IIndexArgs[&#39;options&#39;]</code></p>
 				<p><code>@subModel(options: SchemaOptions &amp; {name?: string} = {})</code></p>
 				<h2 id="schema-level-decorators">Schema level Decorators</h2>
-				<p><code>@prop(options: SchemaTypeOpts&lt;T&gt; = {}, type?: T)</code></p>
-				<p><code>@array(type?: T, options?: SchemaTypeOpts&lt;T&gt;)</code></p>
+				<p><code>@prop(options: SchemaTypeOpts&lt;T&gt; = {}, type?: T)</code> type is optional, mongoose-typescript will try to determined the type automatically</p>
+				<p><code>@array(type?: T, options?: SchemaTypeOpts&lt;T&gt;)</code> because of typescript only mark the type as Array, so array field need set type manually, or using mixed</p>
 				<p><code>@id</code> empty decorator, just for emit Reflect metadata for <code>_id</code></p>
 				<p><code>@required</code> set schema <code>{required: true}</code></p>
 				<p><code>@indexed</code> set schema <code>{index: true}</code></p>
 				<p><code>@hidden</code> set schema <code>{select: false}</code></p>
 				<p><code>@unique</code> set schema <code>{unique: false}</code></p>
 				<p><code>@type(type)</code> set schema <code>{type: type}</code></p>
+				<p><code>@defaults(value)</code> set schema <code>{default: value}</code></p>
 				<p><code>@ref(nameOrClass: string | IMongooseClass)</code> set schema <code>{ref: nameOrClass}</code>
 				if type isn&#39;t set, and the argument is class, <code>mongoose-typescript</code> will try to using the typeof <code>class._id</code>, if cannot determined the type, using <code>mongoose.Types.ObjectId</code></p>
 				<p><code>@statics</code> register statics method</p>
