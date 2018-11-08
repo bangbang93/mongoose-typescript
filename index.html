@@ -66,6 +66,8 @@
 			<div class="tsd-panel tsd-typography">
 				<h1 id="mongoose-typescript">mongoose-typescript</h1>
 				<p>Build mongoose schema with typescript and decorator</p>
+				<h2 id="before-usage">Before Usage</h2>
+				<p>make sure that both <code>experimentalDecorators</code> and <code>emitDecoratorMetadata</code> are set to true in tsconfig</p>
 				<h2 id="example">Example</h2>
 				<pre><code class="language-typescript"><span class="hljs-meta">@subModel</span>()
 <span class="hljs-keyword">class</span> Address {
@@ -146,7 +148,7 @@ user.save()</code></pre>
 				<p><code>@type(type)</code> set schema <code>{type: type}</code></p>
 				<p><code>@defaults(value)</code> set schema <code>{default: value}</code></p>
 				<p><code>@ref(nameOrClass: string | IMongooseClass)</code> set schema <code>{ref: nameOrClass}</code>
-				if type isn&#39;t set, and the argument is class, <code>mongoose-typescript</code> will try to using the typeof <code>class._id</code>, if cannot determined the type, using <code>mongoose.Types.ObjectId</code></p>
+				if type isn&#39;t set, and the argument is class, <code>mongoose-typescript</code> will try to using the typeof <code>class._id</code></p>
 				<p><code>@statics</code> register statics method</p>
 				<p><code>@methods</code> register instance method</p>
 				<p><code>@query</code> register query helper</p>
