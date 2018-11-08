@@ -1,8 +1,9 @@
 {
   "name": "mongoose-typescript",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "doc": "typedoc --out docs src && touch docs/.nojekyll",
@@ -20,7 +21,7 @@
   },
   "homepage": "https://github.com/bangbang93/mongoose-typescript#readme",
   "peerDependencies": {
-    "mongoose": "^5.3.10"
+    "mongoose": "*"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
