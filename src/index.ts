@@ -15,8 +15,13 @@ const schemaCache = new WeakMap<MongooseMeta, Schema>()
 
 export function getSchema(modelClass: IMongooseClass): Schema {
   const meta = getMongooseMeta(modelClass.prototype)
+  if (schemaCache.has(meta)) {
+    return schemaCache.get(meta)
+  }
 
-  return buildSchema(meta)
+  const schema = buildSchema(meta)
+  schemaCache.set(meta, schema)
+  return schema
 }
 
 export function getModel<T extends IMongooseClass>(
@@ -32,11 +37,7 @@ export function getModel<T extends IMongooseClass>(
 }
 
 function buildSchema(meta: MongooseMeta): Schema {
-  if (schemaCache.has(meta)) {
-    return schemaCache.get(meta)
-  }
   const schema = new Schema(meta.schema, meta.options)
-  schemaCache.set(meta, schema)
 
   Object.keys(meta.statics)
     .forEach((name) => {
