@@ -16,9 +16,9 @@ class Address {
 }
 
 @model('user')
-class User {
+class User extends Model<User> {
   @statics
-  public static async findByName(this: IUserModel, name: string): Promise<IUserDocument> {
+  public static async findByName(name: string): Promise<User> {
     return this.findOne({username: name})
   }
 
@@ -28,15 +28,19 @@ class User {
   @prop() @hidden public password: string
   @prop() @indexed public loginCount: number
   @array(Address) public addresses: Address[]
+
+  @methods
+  public addAddress(address: Address) {
+    this.addresses.push(address)
+    return this
+  }
 }
-type IUserDocument = DocumentType<User>
-type IUserModel = ModelType<User> & typeof User
 
 @model('organization')
 @index({user: 1, name: 1}, {unique: true})
-class Organization {
+class Organization extends Model<Organization> {
   @statics
-  public static async listByUser(this: IOrganizationModel, userId: string) {
+  public static async listByUser(userId: string) {
     return this.find({
       members: userId,
     })
@@ -49,15 +53,13 @@ class Organization {
   @array() @ref(User) public members: Array<Ref<User>>
 
   @methods
-  public async addMember(this: IOrganizationDocument, userId: mongoose.Types.ObjectId) {
+  public async addMember(userId: mongoose.Types.ObjectId) {
     this.members.push(userId)
     return this.save()
   }
 }
-type IOrganizationDocument = DocumentType<Organization>
-type IOrganizationModel = ModelType<Organization> & typeof Organization
 
-const UserModel = getModel(User)
+const UserModel: typeof User = getModel(User)
 
 const user = new UserModel({
   username: 'abc',
@@ -72,6 +74,11 @@ const user = new UserModel({
 
 user.save()
 ```
+
+## Function
+`getSchema(model): Schema` get Schema for custom config
+
+`getModel(model): Model` get Model
 
 ## Model level Decorators
 
