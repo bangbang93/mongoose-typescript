@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "doc": "typedoc --out doc src/index.ts"
+    "doc": "typedoc --out doc src/index.ts",
+    "prepublishOnly": "npm run build",
+    "test": "mocha --require ts-node/register/transpile-only test/index.ts"
   },
   "repository": {
     "type": "git",
@@ -21,7 +23,9 @@
     "mongoose": "^5.3.10"
   },
   "devDependencies": {
+    "@types/mocha": "^5.2.5",
     "@types/mongoose": "^5.3.1",
+    "mocha": "^5.2.0",
     "mongoose": "^5.3.10",
     "should": "^13.2.3",
     "ts-node": "^7.0.1",
@@ -31,5 +35,8 @@
   },
   "dependencies": {
     "reflect-metadata": "^0.1.12"
-  }
+  },
+  "files": [
+    "lib/**"
+  ]
 }

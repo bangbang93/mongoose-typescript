@@ -33,24 +33,6 @@ class User {
 type IUserDocument = DocumentType<User>
 type IUserModel = ModelType<User> & typeof User
 
-const UserModel: IUserModel = getModel(User)
-
-UserModel.should.hasOwnProperty('findByName')
-const user = new UserModel({
-  username: 'abc',
-  password: 'wow',
-  addresses: [{
-    country: 'china',
-    city: 'hangzhou',
-    address: 'xihu',
-  }],
-})
-
-user.save().should
-    .rejectedWith('user validation failed: addresses.0.province: Path `province` is required.')
-
-user.addresses[0].country.should.eql('china')
-
 @model('organization')
 @index({user: 1, name: 1}, {unique: true})
 class Organization {
@@ -76,6 +58,40 @@ class Organization {
 type IOrganizationDocument = DocumentType<Organization>
 type IOrganizationModel = ModelType<Organization> & typeof Organization
 
-const OrganizationModel: IOrganizationModel = getModel(Organization)
+describe('User', function (this) {
+  let UserModel: IUserModel
+  it('getModel', function (this) {
+    UserModel = getModel(User)
+    UserModel.should.hasOwnProperty('findByName')
+  })
 
-OrganizationModel.should.hasOwnProperty('listByUser')
+  it('document', async function (this) {
+    const user = new UserModel({
+      username: 'abc',
+      password: 'wow',
+      addresses: [{
+        country: 'china',
+        city: 'hangzhou',
+        address: 'xihu',
+      }],
+    })
+
+    user.addresses[0].country.should.eql('china')
+
+    await user.save().should
+        .rejectedWith('user validation failed: addresses.0.province: Path `province` is required.')
+
+  })
+})
+
+describe('organization', function (this) {
+  let OrganizationModel: IOrganizationModel
+  it('getModel', function (this) {
+    OrganizationModel = getModel(Organization)
+    OrganizationModel.should.hasOwnProperty('listByUser')
+  })
+})
+
+after(async function (this) {
+  await mongoose.disconnect()
+})
