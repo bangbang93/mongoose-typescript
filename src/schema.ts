@@ -1,11 +1,12 @@
 import {SchemaTypeOpts} from 'mongoose'
 import {getSchema} from './index'
 import {getMongooseMeta, IMongooseClass} from './meta'
+import {getType} from './util'
 
 export function prop<T>(options: SchemaTypeOpts<T> & {type?: T} = {}, type?: T): PropertyDecorator {
   return (target: any, name: string) => {
-    if (!type) {
-      type = Reflect.getMetadata('design:type', target, name)
+    if (!type && ! options.type) {
+      type = getType(target, name)
     }
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ...options, type}
   }
@@ -63,8 +64,8 @@ export function ref(nameOrClass: string | IMongooseClass, idType?: any) {
   } else {
     return (target: any, name: string) => {
       const field = getMongooseMeta(target).schema[name] || {}
-      if (field.type === undefined) {
-        const type = idType || Reflect.getMetadata('design:type', nameOrClass.prototype, '_id')
+      if (field.type === undefined || idType) {
+        const type = idType || getType(nameOrClass.prototype, '_id')
         if (!type) {
           throw new Error(`cannot get type for ref ${target.constructor.name}.${name} ` +
                                    `to ${nameOrClass.constructor.name}._id`)
