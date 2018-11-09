@@ -85,6 +85,13 @@ describe('User', function (this) {
       }],
     })
 
+    user.addAddress({
+      country: 'china',
+      province: 'zhejiang',
+      city: 'hangzhou',
+      address: 'cuiyuan',
+    })
+
     user.addresses[0].country.should.eql('china')
 
     await user.save().should
