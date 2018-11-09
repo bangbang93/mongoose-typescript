@@ -16,6 +16,11 @@ class Address {
   @prop() @required public address: string
 }
 
+@subModel()
+class Account {
+  @prop() @required public name: string
+}
+
 let hookRun = 0
 
 @model('user')
@@ -32,6 +37,7 @@ class User extends Model<User> {
   @prop() @hidden public password: string
   @prop() @indexed public loginCount: number
   @array(Address) public addresses: Address[]
+  @prop() public account: Account
 
   @methods
   public addAddress(address: Address) {
@@ -83,6 +89,9 @@ describe('User', function (this) {
         city: 'hangzhou',
         address: 'xihu',
       }],
+      account: {
+        name: 'aaa',
+      },
     })
 
     user.addAddress({

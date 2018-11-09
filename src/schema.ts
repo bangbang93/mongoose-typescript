@@ -5,8 +5,11 @@ import {getType} from './util'
 
 export function prop<T>(options: SchemaTypeOpts<T> & {type?: T} = {}, type?: T): PropertyDecorator {
   return (target: any, name: string) => {
-    if (!type && ! options.type) {
+    if (!type && !options.type) {
       type = getType(target, name)
+      if (type['prototype'] && type['prototype'].__mongooseMeta__) {
+        type = getSchema(type as any) as any
+      }
     }
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ...options, type}
   }
@@ -14,15 +17,10 @@ export function prop<T>(options: SchemaTypeOpts<T> & {type?: T} = {}, type?: T):
 
 export function array<T>(type?: T, options?: SchemaTypeOpts<T>) {
   return (target: any, name: string) => {
-    if (!type || type['prototype'] && type['prototype'].__mongoose_meta__) {
-      getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ...options, type: [type]}
-    } else {
-      getMongooseMeta(target).schema[name] = {
-        ...getMongooseMeta(target).schema[name],
-        ...options,
-        type: [getSchema(type as any)],
-      }
+    if (type && type['prototype'] && type['prototype'].__mongooseMeta__) {
+      type = getSchema(type as any) as any
     }
+    getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ...options, type: [type]}
   }
 }
 
