@@ -2,8 +2,8 @@
 import * as mongoose from 'mongoose'
 import 'should'
 import {
-  array, getModel, hidden, id, index, indexed, methods, Model, model, prop, Ref, ref, required, statics, subModel,
-  unique,
+  array, getModel, hidden, id, index, indexed, methods, middleware, Model, model, prop, Ref, ref, required, statics,
+  subModel, unique,
 } from '../src'
 
 mongoose.connect('mongodb://localhost/test')
@@ -16,7 +16,10 @@ class Address {
   @prop() @required public address: string
 }
 
+let hookRun = 0
+
 @model('user')
+@middleware<User>('findOne', 'pre', () => hookRun ++)
 class User extends Model<User> {
   @statics
   public static async findByName(name: string): Promise<User> {
@@ -67,6 +70,10 @@ describe('User', function (this) {
     UserModel.should.hasOwnProperty('findByName')
   })
 
+  it('find', function (this) {
+    return UserModel.findByName('aaa')
+  })
+
   it('document', async function (this) {
     const user = new UserModel({
       username: 'abc',
@@ -82,6 +89,10 @@ describe('User', function (this) {
 
     await user.save().should
         .rejectedWith('user validation failed: addresses.0.province: Path `province` is required.')
+  })
+
+  it('hook', function (this) {
+    hookRun.should.greaterThan(0)
   })
 })
 

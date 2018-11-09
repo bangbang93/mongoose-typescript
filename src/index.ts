@@ -1,14 +1,16 @@
 import {Document, model, Model, Schema, Types} from 'mongoose'
 import 'reflect-metadata'
 
-import {ActionType, Fn, getMongooseMeta, HookType, IMongooseClass, MongooseMeta} from './meta'
+import {Fn, getMongooseMeta, IMongooseClass, MongooseMeta} from './meta'
+import {ActionType, HookType} from './middleware'
 
 export * from './model'
 export * from './schema'
 export * from './model-helper'
+export * from './middleware'
 
-type DocumentType<T> = T & Document
-type ModelType<T> = Model<DocumentType<T>>
+export type DocumentType<T> = T & Document
+export type ModelType<T> = Model<DocumentType<T>>
 export type Ref<T> = Types.ObjectId | DocumentType<T>
 
 const modelCache = new WeakMap<IMongooseClass, ModelType<IMongooseClass>>()
@@ -69,8 +71,8 @@ function buildSchema(meta: MongooseMeta): Schema {
     schema.index(fields, options)
   })
 
-  meta.hooks.forEach(([hookType, actionType, fn]: [HookType, ActionType, Fn]) => {
-    schema[hookType](actionType, fn)
+  meta.middleware.forEach(([actionType, hookType, fn]: [ActionType, HookType, Fn]) => {
+    (schema[hookType] as any)(actionType, fn)
   })
 
   return schema
