@@ -84,9 +84,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_meta_.mongoosemeta.html#hooks" class="tsd-kind-icon">hooks</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_meta_.mongoosemeta.html#indexes" class="tsd-kind-icon">indexes</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_meta_.mongoosemeta.html#methods" class="tsd-kind-icon">methods</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_meta_.mongoosemeta.html#middleware" class="tsd-kind-icon">middleware</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_meta_.mongoosemeta.html#name" class="tsd-kind-icon">name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_meta_.mongoosemeta.html#options" class="tsd-kind-icon">options</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_meta_.mongoosemeta.html#queries" class="tsd-kind-icon">queries</a></li>
@@ -101,22 +101,12 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="hooks" class="tsd-anchor"></a>
-					<h3>hooks</h3>
-					<div class="tsd-signature tsd-kind-icon">hooks<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../modules/_meta_.html#hooktype" class="tsd-signature-type">HookType</a><span class="tsd-signature-symbol">, </span><a href="../modules/_meta_.html#actiontype" class="tsd-signature-type">ActionType</a><span class="tsd-signature-symbol">, </span><a href="../modules/_meta_.html#fn" class="tsd-signature-type">Fn</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/8ad4c5b/src/meta.ts#L25">meta.ts:25</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="indexes" class="tsd-anchor"></a>
 					<h3>indexes</h3>
 					<div class="tsd-signature tsd-kind-icon">indexes<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_meta_.iindexargs.html" class="tsd-signature-type">IIndexArgs</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/8ad4c5b/src/meta.ts#L24">meta.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/77a69d4/src/meta.ts#L22">meta.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -126,7 +116,7 @@
 					<div class="tsd-signature tsd-kind-icon">methods<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/8ad4c5b/src/meta.ts#L21">meta.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/77a69d4/src/meta.ts#L19">meta.ts:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -139,12 +129,22 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="middleware" class="tsd-anchor"></a>
+					<h3>middleware</h3>
+					<div class="tsd-signature tsd-kind-icon">middleware<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../modules/_middleware_.html#actiontype" class="tsd-signature-type">ActionType</a><span class="tsd-signature-symbol">, </span><a href="../modules/_middleware_.html#hooktype" class="tsd-signature-type">HookType</a><span class="tsd-signature-symbol">, </span><a href="../modules/_meta_.html#fn" class="tsd-signature-type">Fn</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/77a69d4/src/meta.ts#L23">meta.ts:23</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="name" class="tsd-anchor"></a>
 					<h3>name</h3>
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/8ad4c5b/src/meta.ts#L18">meta.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/77a69d4/src/meta.ts#L16">meta.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -154,7 +154,7 @@
 					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SchemaOptions</span><span class="tsd-signature-symbol"> =&nbsp;null</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/8ad4c5b/src/meta.ts#L27">meta.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/77a69d4/src/meta.ts#L25">meta.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -164,7 +164,7 @@
 					<div class="tsd-signature tsd-kind-icon">queries<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/8ad4c5b/src/meta.ts#L23">meta.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/77a69d4/src/meta.ts#L21">meta.ts:21</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -182,7 +182,7 @@
 					<div class="tsd-signature tsd-kind-icon">schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/8ad4c5b/src/meta.ts#L19">meta.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/77a69d4/src/meta.ts#L17">meta.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -192,7 +192,7 @@
 					<div class="tsd-signature tsd-kind-icon">statics<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/8ad4c5b/src/meta.ts#L20">meta.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/77a69d4/src/meta.ts#L18">meta.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -210,7 +210,7 @@
 					<div class="tsd-signature tsd-kind-icon">virtuals<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/8ad4c5b/src/meta.ts#L22">meta.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/77a69d4/src/meta.ts#L20">meta.ts:20</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -237,6 +237,9 @@
 						<a href="../modules/_meta_.html">"meta"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_middleware_.html">"middleware"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_model_.html">"model"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -252,13 +255,13 @@
 						<a href="_meta_.mongoosemeta.html" class="tsd-kind-icon">Mongoose<wbr>Meta</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_meta_.mongoosemeta.html#hooks" class="tsd-kind-icon">hooks</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_meta_.mongoosemeta.html#indexes" class="tsd-kind-icon">indexes</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_meta_.mongoosemeta.html#methods" class="tsd-kind-icon">methods</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_meta_.mongoosemeta.html#middleware" class="tsd-kind-icon">middleware</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_meta_.mongoosemeta.html#name" class="tsd-kind-icon">name</a>
@@ -289,13 +292,7 @@
 						<a href="../interfaces/_meta_.imongooseclass.html" class="tsd-kind-icon">IMongoose<wbr>Class</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_meta_.html#actiontype" class="tsd-kind-icon">Action<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
 						<a href="../modules/_meta_.html#fn" class="tsd-kind-icon">Fn</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_meta_.html#hooktype" class="tsd-kind-icon">Hook<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_meta_.html#getmongoosemeta" class="tsd-kind-icon">get<wbr>Mongoose<wbr>Meta</a>

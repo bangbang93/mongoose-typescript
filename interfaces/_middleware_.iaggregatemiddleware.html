@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IIndexArgs | mongoose-typescript</title>
+	<title>IAggregateMiddleware | mongoose-typescript</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_meta_.html">&quot;meta&quot;</a>
+					<a href="../modules/_middleware_.html">&quot;middleware&quot;</a>
 				</li>
 				<li>
-					<a href="_meta_.iindexargs.html">IIndexArgs</a>
+					<a href="_middleware_.iaggregatemiddleware.html">IAggregateMiddleware</a>
 				</li>
 			</ul>
-			<h1>Interface IIndexArgs</h1>
+			<h1>Interface IAggregateMiddleware</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IIndexArgs</span>
+						<span class="target">IAggregateMiddleware</span>
 					</li>
 				</ul>
 			</section>
@@ -81,48 +81,26 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_meta_.iindexargs.html#fields" class="tsd-kind-icon">fields</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_meta_.iindexargs.html#options" class="tsd-kind-icon">options</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="_middleware_.iaggregatemiddleware.html#aggregate" class="tsd-kind-icon">aggregate</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="fields" class="tsd-anchor"></a>
-					<h3>fields</h3>
-					<div class="tsd-signature tsd-kind-icon">fields<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="aggregate" class="tsd-anchor"></a>
+					<h3>aggregate</h3>
+					<div class="tsd-signature tsd-kind-icon">aggregate<span class="tsd-signature-symbol">:</span> <a href="../modules/_middleware_.html#hooktype" class="tsd-signature-type">HookType</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/77a69d4/src/meta.ts#L7">meta.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/77a69d4/src/middleware.ts#L23">middleware.ts:23</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="options" class="tsd-anchor"></a>
-					<h3>options</h3>
-					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/77a69d4/src/meta.ts#L8">meta.ts:8</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-index-signature">
-								<h5><span class="tsd-signature-symbol">[</span>other: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></h5>
-							</li>
-							<li class="tsd-parameter">
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> expires<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></h5>
-							</li>
-						</ul>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -135,10 +113,10 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_meta_.html">"meta"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_middleware_.html">"middleware"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -151,32 +129,53 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_meta_.mongoosemeta.html" class="tsd-kind-icon">Mongoose<wbr>Meta</a>
-					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_meta_.iindexargs.html" class="tsd-kind-icon">IIndex<wbr>Args</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_middleware_.iaggregatemiddleware.html" class="tsd-kind-icon">IAggregate<wbr>Middleware</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_meta_.iindexargs.html#fields" class="tsd-kind-icon">fields</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_meta_.iindexargs.html#options" class="tsd-kind-icon">options</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_middleware_.iaggregatemiddleware.html#aggregate" class="tsd-kind-icon">aggregate</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_meta_.imongooseclass.html" class="tsd-kind-icon">IMongoose<wbr>Class</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_middleware_.idocumentmiddleware.html" class="tsd-kind-icon">IDocument<wbr>Middleware</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_middleware_.imodelmiddleware.html" class="tsd-kind-icon">IModel<wbr>Middleware</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_middleware_.iquerymiddleware.html" class="tsd-kind-icon">IQuery<wbr>Middleware</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_meta_.html#fn" class="tsd-kind-icon">Fn</a>
+						<a href="../modules/_middleware_.html#actiontype" class="tsd-kind-icon">Action<wbr>Type</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="../modules/_meta_.html#getmongoosemeta" class="tsd-kind-icon">get<wbr>Mongoose<wbr>Meta</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="../modules/_middleware_.html#aggregatehookfunction" class="tsd-kind-icon">Aggregate<wbr>Hook<wbr>Function</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="../modules/_middleware_.html#documenthookfunction" class="tsd-kind-icon">Document<wbr>Hook<wbr>Function</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/_middleware_.html#hooktype" class="tsd-kind-icon">Hook<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/_middleware_.html#middlewaretype" class="tsd-kind-icon">Middleware<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="../modules/_middleware_.html#modelhookfunction" class="tsd-kind-icon">Model<wbr>Hook<wbr>Function</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="../modules/_middleware_.html#queryhookfunction" class="tsd-kind-icon">Query<wbr>Hook<wbr>Function</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="../modules/_middleware_.html#r" class="tsd-kind-icon">R</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/_middleware_.html#middleware" class="tsd-kind-icon">middleware</a>
 					</li>
 				</ul>
 			</nav>
