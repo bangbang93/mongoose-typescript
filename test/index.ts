@@ -16,9 +16,14 @@ class Address {
   @prop() @required public address: string
 }
 
+enum AccountRole {
+  user = 'USER',
+  admin = 'ADMIN',
+}
 @subModel()
 class Account {
   @prop() @required public name: string
+  @prop() public role: AccountRole
 }
 
 let hookRun = 0

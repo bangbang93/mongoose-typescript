@@ -8,6 +8,8 @@ export * from './model'
 export * from './schema'
 export * from './model-helper'
 export * from './middleware'
+// mongoose shortcut
+export const ObjectId = Types.ObjectId
 
 export type DocumentType<T> = T & Document
 export type ModelType<T> = Model<DocumentType<T>>

@@ -56,6 +56,12 @@ export function type(type: any) {
   }
 }
 
+export function enums(values: any[]) {
+  return (target: any, name: string) => {
+    getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], enum: values}
+  }
+}
+
 export function ref(nameOrClass: string | IMongooseClass, idType?: any) {
   if (typeof nameOrClass === 'string') {
     return (target: any, name: string) => {
