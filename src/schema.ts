@@ -44,8 +44,10 @@ export function unique(target: any, name: string) {
   getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], unique: true}
 }
 
-export function defaults(target: any, name: string) {
-  getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], default: true}
+export function defaults<T>(value: T) {
+  return (target: any, name: string) => {
+    getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], default: value}
+  }
 }
 
 export function type(type: any) {
