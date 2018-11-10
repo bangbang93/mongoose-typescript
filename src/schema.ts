@@ -5,13 +5,14 @@ import {getType} from './util'
 
 export function prop<T>(options: SchemaTypeOpts<T> & {type?: T} = {}, type?: T): PropertyDecorator {
   return (target: any, name: string) => {
+    const pathSchema = getMongooseMeta(target).schema[name] || {}
     if (!type && !options.type) {
       type = getType(target, name)
-      if (type['prototype'] && type['prototype'].__mongooseMeta__) {
+      if (type['prototype'] && type['prototype'].__mongooseMeta__ && !pathSchema.type) {
         type = getSchema(type as any) as any
       }
     }
-    getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ...options, type}
+    getMongooseMeta(target).schema[name] = {...pathSchema, ...options, type}
   }
 }
 
@@ -65,7 +66,7 @@ export function enums(values: any[]) {
 export function ref(nameOrClass: string | IMongooseClass, idType?: any) {
   if (typeof nameOrClass === 'string') {
     return (target: any, name: string) => {
-      getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ref}
+      getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ref: nameOrClass, type: idType}
     }
   } else {
     return (target: any, name: string) => {
