@@ -71,13 +71,18 @@ export function ref(nameOrClass: string | IMongooseClass, idType?: any) {
   } else {
     return (target: any, name: string) => {
       const field = getMongooseMeta(target).schema[name] || {}
-      if (field.type === undefined || idType) {
+      const isArray = Array.isArray(field.type)
+      if (field.type === undefined || idType || (isArray && field.type[0] === undefined)) {
         const type = idType || getType(nameOrClass.prototype, '_id')
         if (!type) {
           throw new Error(`cannot get type for ref ${target.constructor.name}.${name} ` +
                                    `to ${nameOrClass.constructor.name}._id`)
         }
-        field.type = type
+        if (isArray) {
+          field.type = [type]
+        } else {
+          field.type = type
+        }
       }
       getMongooseMeta(target).schema[name] = {...field,
                                               ref: getMongooseMeta(nameOrClass.prototype).name}
