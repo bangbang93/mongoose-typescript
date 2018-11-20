@@ -2,7 +2,8 @@
 import * as mongoose from 'mongoose'
 import 'should'
 import {
-  array, getModel, hidden, id, index, indexed, methods, middleware, Model, model, prop, Ref, ref, required, statics,
+  array, getModel, getSchema, hidden, id, index, indexed, methods, middleware, Model, model, prop, Ref, ref, required,
+  statics,
   subModel, unique,
 } from '../src'
 
@@ -120,8 +121,10 @@ describe('User', function (this) {
 describe('organization', function (this) {
   let OrganizationModel: typeof Organization
   it('getModel', function (this) {
+    const OrganizationSchema = getSchema(Organization)
     OrganizationModel = getModel(Organization)
     OrganizationModel.should.hasOwnProperty('listByUser')
+    OrganizationSchema['paths'].members.casterConstructor.name.should.eql('ObjectId')
   })
 })
 

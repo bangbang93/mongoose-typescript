@@ -21,6 +21,8 @@ export function array<T>(type?: T, options?: SchemaTypeOpts<T>) {
     if (type && type['prototype'] && type['prototype'].__mongooseMeta__) {
       type = getSchema(type as any) as any
     }
+    const path = getMongooseMeta(target).schema[name]
+    if (!type) type = path.type
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ...options, type: [type]}
   }
 }
