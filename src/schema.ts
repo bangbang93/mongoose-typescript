@@ -6,7 +6,8 @@ import {getType} from './util'
 export function prop<T>(options: SchemaTypeOpts<T> & {type?: T} = {}, type?: T): PropertyDecorator {
   return (target: any, name: string) => {
     const pathSchema = getMongooseMeta(target).schema[name] || {}
-    if (!type && !options.type && !pathSchema.type) {
+    type = type || pathSchema.type
+    if (!type && !options.type) {
       type = getType(target, name)
       if (type['prototype'] && type['prototype'].__mongooseMeta__ && !pathSchema.type) {
         type = getSchema(type as any) as any
