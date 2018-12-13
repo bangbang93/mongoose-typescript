@@ -22,7 +22,7 @@ export function array<T>(type?: T, options?: SchemaTypeOpts<T>) {
     if (type && type['prototype'] && type['prototype'].__mongooseMeta__) {
       type = getSchema(type as any) as any
     }
-    if (type['type'] && type['type']['prototype'] && type['type']['prototype'].__mongooseMeta__) {
+    if (type && type['type'] && type['type']['prototype'] && type['type']['prototype'].__mongooseMeta__) {
       type['type'] = getSchema(type['type'] as any) as any
     }
     const path = getMongooseMeta(target).schema[name]
