@@ -17,7 +17,7 @@ export function prop<T>(options: SchemaTypeOpts<T> & {type?: T} = {}, type?: T):
   }
 }
 
-export function array<T>(type?: T, options?: SchemaTypeOpts<T>) {
+export function array<T>(type?: T, options?: SchemaTypeOpts<T[]>) {
   return (target: any, name: string) => {
     if (type && type['prototype'] && type['prototype'].__mongooseMeta__) {
       type = getSchema(type as any) as any
