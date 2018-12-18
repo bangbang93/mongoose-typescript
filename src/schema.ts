@@ -1,4 +1,4 @@
-import {SchemaTypeOpts} from 'mongoose'
+import {Schema, SchemaTypeOpts, Types} from 'mongoose'
 import {getSchema} from './index'
 import {getMongooseMeta, IMongooseClass} from './meta'
 import {getType} from './util'
@@ -27,6 +27,9 @@ export function array<T>(type?: T, options?: SchemaTypeOpts<T[]>) {
     }
     const path = getMongooseMeta(target).schema[name]
     if (!type) type = path.type
+    if (type === Types.ObjectId as any) {
+      type = Schema.Types.ObjectId as any
+    }
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ...options, type: [type]}
   }
 }
