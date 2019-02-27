@@ -8,6 +8,7 @@ export * from './model'
 export * from './schema'
 export * from './model-helper'
 export * from './middleware'
+export {default as validators} from './validator'
 // mongoose shortcut
 export const ObjectId = Types.ObjectId
 
