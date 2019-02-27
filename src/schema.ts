@@ -1,5 +1,5 @@
 import {Schema, SchemaTypeOpts, Types} from 'mongoose'
-import {getSchema} from './index'
+import {getSchema, validators} from './index'
 import {getMongooseMeta, IMongooseClass} from './meta'
 import {getType} from './util'
 
@@ -113,4 +113,9 @@ export function methods(target: any, name: string) {
 
 export function virtual(target: any, name: string, descriptor: PropertyDescriptor) {
   getMongooseMeta(target).virtuals[name] = descriptor
+}
+
+export function mongoId<T>(options: SchemaTypeOpts<T> & {type?: T} = {}, type?: T): PropertyDecorator {
+  options = {validate: validators.mongoId, ...options}
+  return prop(options, type)
 }
