@@ -96,22 +96,22 @@ user.save()
 
 `@id` empty decorator, just for emit Reflect metadata for `_id`
 
-`@required` set schema `{required: true}`
+`@required` set field `{required: true}`
 
-`@indexed` set schema `{index: true}`
+`@indexed` set field `{index: true}`
 
-`@hidden` set schema `{select: false}`
+`@hidden` set field `{select: false}`
 
-`@unique` set schema `{unique: false}`
+`@unique` set field `{unique: true}`
 
-`@type(type)` set schema `{type: type}`
+`@type(type)` set field `{type: type}`
 
-`@defaults(value)` set schema `{default: value}`
+`@defaults(value)` set field `{default: value}`
 
-`@ref(nameOrClass: string | IMongooseClass)` set schema `{ref: nameOrClass}`
+`@ref(nameOrClass: string | IMongooseClass)` set field `{ref: nameOrClass}`
 if type isn't set, and the argument is class, `mongoose-typescript` will try to using the typeof `class._id`
 
-`@statics` register statics method
+`@statics` register static method
 
 `@methods` register instance method
 
