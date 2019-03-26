@@ -18,7 +18,5 @@ deploy:
   github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
   keep-history: true
   local-dir: docs
-  edge:
-    branch: v1.8.47
   on:
     branch: master
