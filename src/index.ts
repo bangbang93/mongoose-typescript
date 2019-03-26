@@ -78,5 +78,9 @@ function buildSchema(meta: MongooseMeta): Schema {
     (schema[hookType] as any)(actionType, fn)
   })
 
+  meta.plugins.forEach(({plugin, options}) => {
+    schema.plugin(plugin, options)
+  })
+
   return schema
 }

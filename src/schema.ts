@@ -13,7 +13,7 @@ export function prop<T>(options: SchemaTypeOpts<T> & {type?: T} = {}, type?: T):
         type = getSchema(type as any) as any
       }
     }
-    getMongooseMeta(target).schema[name] = {...pathSchema, ...options, type}
+    getMongooseMeta(target).schema[name] = {...pathSchema, ...options, ...(type ? { type } : {})}
   }
 }
 
