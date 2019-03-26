@@ -84,7 +84,9 @@ user.save()
 
 `@model(name: string, options?: SchemaOptions)`
 
-`@index(fields: IIndexArgs['fields'], options?: IIndexArgs['options']`
+`@index(fields: IIndexArgs['fields'], options?: IIndexArgs['options'])`
+
+`@plugin<T>(plugin: IPluginType<T>, options?: T)` registers a mongoose [schema plugin](https://mongoosejs.com/docs/plugins.html)
 
 `@subModel(options: SchemaOptions & {name?: string} = {})`
 
