@@ -8,7 +8,8 @@
     "build": "rm -rf lib && tsc && cp -r src/model-helper lib",
     "doc": "typedoc --out docs src && touch docs/.nojekyll",
     "prepublishOnly": "npm run build",
-    "test": "mocha --require ts-node/register/transpile-only test/index.ts"
+    "test": "mocha --require ts-node/register/transpile-only test/index.ts",
+    "lint": "tslint -p ."
   },
   "repository": {
     "type": "git",

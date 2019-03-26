@@ -65,9 +65,9 @@ function buildSchema(meta: MongooseMeta): Schema {
       const virtual = schema.virtual(name)
       const descriptor = meta.virtuals[name]
 
-      if (descriptor.get) virtual.get(descriptor.get)
+      if (descriptor.get) virtual.get(descriptor.get.bind(descriptor))
 
-      if (descriptor.set) virtual.set(descriptor.set)
+      if (descriptor.set) virtual.set(descriptor.set.bind(descriptor))
     })
 
   meta.indexes.forEach(({fields, options}) => {

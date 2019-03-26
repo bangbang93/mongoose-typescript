@@ -1,4 +1,4 @@
-import {SchemaOptions, Schema} from 'mongoose'
+import {Schema, SchemaOptions} from 'mongoose'
 import {ActionType, HookType} from './middleware'
 
 export type Fn = (...args: any[]) => any
@@ -14,8 +14,8 @@ export interface IIndexArgs {
 export type IPluginType<T> = (schema: Schema, options?: T) => void
 
 export interface IPluginArgs<T> {
-  plugin: IPluginType<T>;
-  options?: T;
+  plugin: IPluginType<T>
+  options?: T
 }
 
 export class MongooseMeta {
