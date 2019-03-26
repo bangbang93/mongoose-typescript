@@ -81,12 +81,14 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_meta_.iindexargs.html" class="tsd-kind-icon">IIndex<wbr>Args</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_meta_.imongooseclass.html" class="tsd-kind-icon">IMongoose<wbr>Class</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter"><a href="../interfaces/_meta_.ipluginargs.html" class="tsd-kind-icon">IPlugin<wbr>Args</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="_meta_.html#fn" class="tsd-kind-icon">Fn</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_meta_.html#iplugintype" class="tsd-kind-icon">IPlugin<wbr>Type</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -106,7 +108,7 @@
 					<div class="tsd-signature tsd-kind-icon">Fn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/c9913b0/src/meta.ts#L4">meta.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/91ea010/src/meta.ts#L4">meta.ts:4</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -131,6 +133,40 @@
 						</ul>
 					</div>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+					<a name="iplugintype" class="tsd-anchor"></a>
+					<h3>IPlugin<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">IPlugin<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/91ea010/src/meta.ts#L14">meta.ts:14</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Schema</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>schema: <span class="tsd-signature-type">Schema</span></h5>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">T</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
@@ -144,7 +180,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/c9913b0/src/meta.ts#L34">meta.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/bangbang93/mongoose-typescript/blob/91ea010/src/meta.ts#L42">meta.ts:42</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -183,6 +219,9 @@
 					<li class=" tsd-kind-external-module">
 						<a href="_util_.html">"util"</a>
 					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_validator_.html">"validator"</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
@@ -196,8 +235,14 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_meta_.imongooseclass.html" class="tsd-kind-icon">IMongoose<wbr>Class</a>
 					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../interfaces/_meta_.ipluginargs.html" class="tsd-kind-icon">IPlugin<wbr>Args</a>
+					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
 						<a href="_meta_.html#fn" class="tsd-kind-icon">Fn</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="_meta_.html#iplugintype" class="tsd-kind-icon">IPlugin<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_meta_.html#getmongoosemeta" class="tsd-kind-icon">get<wbr>Mongoose<wbr>Meta</a>

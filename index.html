@@ -140,21 +140,22 @@ user.save()</code></pre>
 				<p><code>getModel(model): Model</code> get Model</p>
 				<h2 id="model-level-decorators">Model level Decorators</h2>
 				<p><code>@model(name: string, options?: SchemaOptions)</code></p>
-				<p><code>@index(fields: IIndexArgs[&#39;fields&#39;], options?: IIndexArgs[&#39;options&#39;]</code></p>
+				<p><code>@index(fields: IIndexArgs[&#39;fields&#39;], options?: IIndexArgs[&#39;options&#39;])</code></p>
+				<p><code>@plugin&lt;T&gt;(plugin: IPluginType&lt;T&gt;, options?: T)</code> registers a mongoose <a href="https://mongoosejs.com/docs/plugins.html">schema plugin</a></p>
 				<p><code>@subModel(options: SchemaOptions &amp; {name?: string} = {})</code></p>
 				<h2 id="schema-level-decorators">Schema level Decorators</h2>
 				<p><code>@prop(options: SchemaTypeOpts&lt;T&gt; = {}, type?: T)</code> type is optional, mongoose-typescript will try to determined the type automatically</p>
 				<p><code>@array(type?: T, options?: SchemaTypeOpts&lt;T&gt;)</code> because of typescript only mark the type as Array, so array field need set type manually, or using mixed</p>
 				<p><code>@id</code> empty decorator, just for emit Reflect metadata for <code>_id</code></p>
-				<p><code>@required</code> set schema <code>{required: true}</code></p>
-				<p><code>@indexed</code> set schema <code>{index: true}</code></p>
-				<p><code>@hidden</code> set schema <code>{select: false}</code></p>
-				<p><code>@unique</code> set schema <code>{unique: false}</code></p>
-				<p><code>@type(type)</code> set schema <code>{type: type}</code></p>
-				<p><code>@defaults(value)</code> set schema <code>{default: value}</code></p>
-				<p><code>@ref(nameOrClass: string | IMongooseClass)</code> set schema <code>{ref: nameOrClass}</code>
+				<p><code>@required</code> set field <code>{required: true}</code></p>
+				<p><code>@indexed</code> set field <code>{index: true}</code></p>
+				<p><code>@hidden</code> set field <code>{select: false}</code></p>
+				<p><code>@unique</code> set field <code>{unique: true}</code></p>
+				<p><code>@type(type)</code> set field <code>{type: type}</code></p>
+				<p><code>@defaults(value)</code> set field <code>{default: value}</code></p>
+				<p><code>@ref(nameOrClass: string | IMongooseClass)</code> set field <code>{ref: nameOrClass}</code>
 				if type isn&#39;t set, and the argument is class, <code>mongoose-typescript</code> will try to using the typeof <code>class._id</code></p>
-				<p><code>@statics</code> register statics method</p>
+				<p><code>@statics</code> register static method</p>
 				<p><code>@methods</code> register instance method</p>
 				<p><code>@query</code> register query helper</p>
 				<p><code>@virtual</code> register virtual field</p>
@@ -185,6 +186,9 @@ user.save()</code></pre>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_util_.html">"util"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_validator_.html">"validator"</a>
 					</li>
 				</ul>
 			</nav>
