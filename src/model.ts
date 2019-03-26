@@ -1,5 +1,5 @@
 import {SchemaOptions} from 'mongoose'
-import {getMongooseMeta, IIndexArgs, IMongooseClass} from './meta'
+import {getMongooseMeta, IIndexArgs, IMongooseClass, IPluginArgs} from './meta'
 
 export function model(name: string, options?: SchemaOptions) {
   return (target: IMongooseClass) => {
@@ -26,5 +26,12 @@ export function subModel(options: SchemaOptions & {name?: string} = {}) {
     }
     meta.name = options.name
     meta.options = options
+  }
+}
+
+export function plugin<T>(plugin: IPluginArgs<T>['plugin'], options?: IPluginArgs<T>['options']) {
+  return (target: any) => {
+    getMongooseMeta(target.prototype).plugins
+      .push({plugin, options})
   }
 }

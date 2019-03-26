@@ -4,10 +4,14 @@ import 'should'
 import {
   array, getModel, getSchema, hidden, id, index, indexed, methods, middleware, Model, model, prop, Ref, ref, required,
   statics,
-  subModel, unique,
+  subModel, unique, plugin,
 } from '../src'
 
 mongoose.connect('mongodb://localhost/test')
+
+function testPlugin (schema: mongoose.Schema, options: any) {
+  schema.statics.testPluginFunc = () => options
+}
 
 @subModel()
 class Address {
@@ -31,6 +35,7 @@ let hookRun = 0
 
 @model('user')
 @middleware<User>('findOne', 'pre', () => hookRun ++)
+@plugin(testPlugin, { testPlugin: true })
 class User extends Model<User> {
   @statics
   public static async findByName(name: string): Promise<User> {
@@ -115,6 +120,10 @@ describe('User', function (this) {
 
   it('hook', function (this) {
     hookRun.should.greaterThan(0)
+  })
+
+  it('plugin', function (this) {
+    (UserModel as any).testPluginFunc().testPlugin.should.eql(true)
   })
 })
 

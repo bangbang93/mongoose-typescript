@@ -1,4 +1,4 @@
-import {SchemaOptions} from 'mongoose'
+import {SchemaOptions, Schema} from 'mongoose'
 import {ActionType, HookType} from './middleware'
 
 export type Fn = (...args: any[]) => any
@@ -11,6 +11,13 @@ export interface IIndexArgs {
   }
 }
 
+export type IPluginType<T> = (schema: Schema, options?: T) => void
+
+export interface IPluginArgs<T> {
+  plugin: IPluginType<T>;
+  options?: T;
+}
+
 export class MongooseMeta {
 
   public name: string
@@ -21,6 +28,7 @@ export class MongooseMeta {
   public queries: {[name: string]: Fn} = {}
   public indexes: IIndexArgs[] = []
   public middleware: Array<[ActionType, HookType, Fn]> = []
+  public plugins: Array<IPluginArgs<any>> = []
 
   public options: SchemaOptions = null
 }
