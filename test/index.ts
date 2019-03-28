@@ -2,14 +2,13 @@
 import * as mongoose from 'mongoose'
 import 'should'
 import {
-  array, getModel, getSchema, hidden, id, index, indexed, methods, middleware, Model, model, prop, Ref, ref, required,
-  statics,
-  subModel, unique, plugin,
+  array, getModel, getSchema, hidden, id, index, indexed, methods, middleware, Model, model, plugin, prop, Ref, ref,
+  required, statics, subModel, unique,
 } from '../src'
 
 mongoose.connect('mongodb://localhost/test')
 
-function testPlugin (schema: mongoose.Schema, options: any) {
+function testPlugin(schema: mongoose.Schema, options: any) {
   schema.statics.testPluginFunc = () => options
 }
 
@@ -33,6 +32,12 @@ class Account {
 
 let hookRun = 0
 
+@model('some-string-id-model')
+class SomeStringIdModel {
+  @id
+  public readonly _id: string
+}
+
 @model('user')
 @middleware<User>('findOne', 'pre', () => hookRun ++)
 @plugin(testPlugin, { testPlugin: true })
@@ -49,6 +54,7 @@ class User extends Model<User> {
   @prop() @indexed public loginCount: number
   @array(Address) public addresses: Address[]
   @prop() public account: Account
+  @ref(SomeStringIdModel) public someStringIdModel: Ref<SomeStringIdModel>
 
   @methods
   public addAddress(address: Address) {
@@ -104,6 +110,8 @@ describe('User', function (this) {
         name: 'aaa',
       },
     })
+
+    user.someStringIdModel = 'a'
 
     user.addAddress({
       country: 'china',

@@ -14,7 +14,7 @@ export const ObjectId = Types.ObjectId
 
 export type DocumentType<T> = T & Document
 export type ModelType<T> = Model<DocumentType<T>>
-export type Ref<T> = Types.ObjectId | DocumentType<T>
+export type Ref<T extends any> = T['_id'] | DocumentType<T>
 
 const modelCache = new WeakMap<IMongooseClass, ModelType<IMongooseClass>>()
 const schemaCache = new WeakMap<MongooseMeta, Schema>()
