@@ -72,7 +72,10 @@ export function enums(values: any[]) {
   }
 }
 
-export function ref(nameOrClass: string | IMongooseClass, idType?: any) {
+type NameOrClass = string | IMongooseClass
+type NameOrClassType = NameOrClass | (() => NameOrClass)
+
+export function ref(nameOrClass: NameOrClassType, idType?: any) {
   if (typeof nameOrClass === 'string') {
     return (target: any, name: string) => {
       getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ref: nameOrClass, type: idType}
