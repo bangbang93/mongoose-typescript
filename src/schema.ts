@@ -73,9 +73,9 @@ export function enums(values: any[]) {
 }
 
 type NameOrClass = string | IMongooseClass
-type NameOrClassType = NameOrClass | (() => NameOrClass)
+// type NameOrClassType = NameOrClass | (() => NameOrClass)
 
-export function ref(nameOrClass: NameOrClassType, idType?: any) {
+export function ref(nameOrClass: NameOrClass, idType?: any) {
   if (typeof nameOrClass === 'string') {
     return (target: any, name: string) => {
       getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ref: nameOrClass, type: idType}
@@ -88,7 +88,7 @@ export function ref(nameOrClass: NameOrClassType, idType?: any) {
         const type = idType || getType(nameOrClass.prototype, '_id')
         if (!type) {
           throw new Error(`cannot get type for ref ${target.constructor.name}.${name} ` +
-                                   `to ${nameOrClass.constructor.name}._id`)
+                          `to ${nameOrClass.constructor.name}._id`)
         }
         if (isArray) {
           field.type = [type]
@@ -96,8 +96,7 @@ export function ref(nameOrClass: NameOrClassType, idType?: any) {
           field.type = type
         }
       }
-      getMongooseMeta(target).schema[name] = {...field,
-                                              ref: getMongooseMeta(nameOrClass.prototype).name}
+      getMongooseMeta(target).schema[name] = {...field, ref: getMongooseMeta(nameOrClass.prototype).name}
     }
   }
 }
