@@ -11,6 +11,7 @@ export * from './middleware'
 export {default as validators} from './validator'
 // mongoose shortcut
 export const ObjectId = Types.ObjectId
+export type ObjectId = typeof Types.ObjectId
 
 export type DocumentType<T> = T & Document
 export type ModelType<T> = Model<DocumentType<T>>
