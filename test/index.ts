@@ -2,7 +2,9 @@
 import * as mongoose from 'mongoose'
 import 'should'
 import {
-  array, getModel, getSchema, hidden, id, index, indexed, methods, middleware, Model, model, plugin, prop, Ref, ref,
+  array, getModel, getSchema, hidden, id, index, indexed, methods, middleware, Model, model, ModelType, ObjectId,
+  plugin, prop,
+  Ref, ref,
   required, statics, subModel, unique,
 } from '../src'
 
@@ -54,7 +56,7 @@ class User extends Model<User> {
   @prop() @indexed public loginCount: number
   @array(Address) public addresses: Address[]
   @prop() public account: Account
-  @ref(() => SomeStringIdModel) public someStringIdModel: Ref<SomeStringIdModel>
+  @ref(() => SomeStringIdModel, String) public someStringIdModel: Ref<SomeStringIdModel>
 
   @methods
   public addAddress(address: Address) {
@@ -75,9 +77,9 @@ class Organization extends Model<Organization> {
 
   @id public readonly _id: mongoose.Types.ObjectId
 
-  @ref(User) @required public user: Ref<User>
+  @ref(() => User, ObjectId) @required public user: Ref<User>
   @prop() @unique @required public name: string
-  @array() @ref(User) public members: Array<Ref<User>>
+  @array() @ref(() => User, ObjectId) public members: Array<Ref<User>>
 
   @methods
   public async addMember(userId: mongoose.Types.ObjectId) {
@@ -87,7 +89,7 @@ class Organization extends Model<Organization> {
 }
 
 describe('User', function (this) {
-  let UserModel: typeof User
+  let UserModel: ModelType<User> & typeof User
   it('getModel', function (this) {
     UserModel = getModel(User)
     UserModel.should.hasOwnProperty('findByName')
