@@ -54,7 +54,7 @@ class User extends Model<User> {
   @prop() @indexed public loginCount: number
   @array(Address) public addresses: Address[]
   @prop() public account: Account
-  @ref(SomeStringIdModel) public someStringIdModel: Ref<SomeStringIdModel>
+  @ref(() => SomeStringIdModel) public someStringIdModel: Ref<SomeStringIdModel>
 
   @methods
   public addAddress(address: Address) {

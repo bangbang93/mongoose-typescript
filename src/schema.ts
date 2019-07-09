@@ -72,15 +72,16 @@ export function enums(values: any[]) {
   }
 }
 
-type NameOrClass = string | IMongooseClass
-// type NameOrClassType = NameOrClass | (() => NameOrClass)
+type LazyClass = () => IMongooseClass
 
-export function ref(nameOrClass: NameOrClass, idType?: any) {
+export function ref(nameOrClass: string, idType: any)
+export function ref(nameOrClass: IMongooseClass | LazyClass, idType?: any)
+export function ref(nameOrClass: string | IMongooseClass | LazyClass, idType?: any) {
   if (typeof nameOrClass === 'string') {
     return (target: any, name: string) => {
       getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ref: nameOrClass, type: idType}
     }
-  } else {
+  } else if (!!nameOrClass.prototype && !!nameOrClass.prototype.constructor.name) {
     return (target: any, name: string) => {
       const field = getMongooseMeta(target).schema[name] || {}
       const isArray = Array.isArray(field.type)
@@ -97,6 +98,29 @@ export function ref(nameOrClass: NameOrClass, idType?: any) {
         }
       }
       getMongooseMeta(target).schema[name] = {...field, ref: getMongooseMeta(nameOrClass.prototype).name}
+    }
+  } else {
+    return (target: any, name: string) => {
+      const field = getMongooseMeta(target).schema[name] || {}
+      const isArray = Array.isArray(field.type)
+      if (field.type === undefined || idType || (isArray && field.type[0] === undefined)) {
+        getMongooseMeta(target).schema[name] = {
+          ...field,
+          ref: () => {
+            const clazz = (nameOrClass as LazyClass)()
+            const type = idType || getType(clazz.prototype, '_id')
+            if (!type) {
+              throw new Error(`cannot get type for ref ${target.constructor.name}.${name} ` +
+                              `to ${clazz.constructor.name}._id`)
+            }
+            if (isArray) {
+              field.type = [type]
+            } else {
+              field.type = type
+            }
+            return getMongooseMeta(clazz.prototype).name
+          }}
+      }
     }
   }
 }
