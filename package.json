@@ -27,13 +27,13 @@
     "decrator"
   ],
   "peerDependencies": {
-    "mongoose": "*"
+    "mongoose": "^5.7.5"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
     "@types/mongoose": "^5.3.1",
     "mocha": "^5.2.0",
-    "mongoose": "^5.3.10",
+    "mongoose": "^5.7.5",
     "should": "^13.2.3",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
