@@ -124,6 +124,42 @@ export function ref(nameOrClass: string | IMongooseClass | LazyClass, idType?: a
   }
 }
 
+export function refArray(nameOrClass: string | LazyClass | IMongooseClass, elementType: any) {
+  if (typeof nameOrClass === 'string') {
+    return (target: any, name: string) => {
+      getMongooseMeta(target).schema[name] = {
+        ...getMongooseMeta(target).schema[name],
+        type: [{type: [elementType], ref: nameOrClass}],
+      }
+    }
+  } else if (!!nameOrClass.prototype && !!nameOrClass.prototype.constructor.name) {
+    return (target: any, name: string) => {
+      getMongooseMeta(target).schema[name] = {
+        ...getMongooseMeta(target).schema[name],
+        type: [{type: [elementType], ref: getMongooseMeta(nameOrClass.prototype).name}],
+      }
+    }
+  } else {
+    return (target: any, name: string) => {
+      getMongooseMeta(target).schema[name] = {
+        ...getMongooseMeta(target).schema[name],
+        type: [{
+          type: [elementType],
+          ref: () => {
+            const clazz = (nameOrClass as LazyClass)()
+            const type = elementType || getType(clazz.prototype, '_id')
+            if (!type) {
+              throw new Error(`cannot get type for ref ${target.constructor.name}.${name} ` +
+                              `to ${clazz.constructor.name}._id`)
+            }
+            return getMongooseMeta(clazz.prototype).name
+          },
+        }],
+      }
+    }
+  }
+}
+
 export function statics(target: any, name: string) {
   getMongooseMeta(target.prototype).statics[name] = target[name]
 }

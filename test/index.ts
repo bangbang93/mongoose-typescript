@@ -3,9 +3,7 @@ import * as mongoose from 'mongoose'
 import 'should'
 import {
   array, getModel, getSchema, hidden, id, index, indexed, methods, middleware, Model, model, ModelType, ObjectId,
-  plugin, prop,
-  Ref, ref,
-  required, statics, subModel, unique,
+  plugin, prop, Ref, ref, refArray, required, statics, subModel, unique,
 } from '../src'
 
 mongoose.connect('mongodb://localhost/test')
@@ -79,7 +77,7 @@ class Organization extends Model<Organization> {
 
   @ref(() => User, ObjectId) @required public user: Ref<User>
   @prop() @unique @required public name: string
-  @array() @ref(() => User, ObjectId) public members: Array<Ref<User>>
+  @refArray(() => User, ObjectId) public members: Array<Ref<User>>
 
   @methods
   public async addMember(userId: mongoose.Types.ObjectId) {
