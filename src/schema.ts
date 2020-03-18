@@ -66,8 +66,11 @@ export function type(type: any) {
   }
 }
 
-export function enums(values: any[]) {
+export function enums(values: any[] | object) {
   return (target: any, name: string) => {
+    if (!Array.isArray(values)) {
+      values = Object.values(values)
+    }
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], enum: values}
   }
 }
