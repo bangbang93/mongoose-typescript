@@ -1,14 +1,12 @@
 import {Schema, SchemaOptions} from 'mongoose'
 import {ActionType, HookType} from './middleware'
+import type { IndexOptions } from 'mongodb'
 
 export type Fn = (...args: any[]) => any
 
 export interface IIndexArgs {
   fields: any,
-  options: {
-    expires?: string;
-    [other: string]: any;
-  }
+  options: IndexOptions
 }
 
 export type IPluginType<T> = (schema: Schema, options?: T) => void
