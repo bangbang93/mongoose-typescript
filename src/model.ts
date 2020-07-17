@@ -1,6 +1,6 @@
 import {IndexOptions} from 'mongodb'
 import {SchemaOptions} from 'mongoose'
-import {getMongooseMeta, IIndexArgs, IMongooseClass, IPluginArgs} from './meta'
+import {getMongooseMeta, IMongooseClass, IPluginArgs} from './meta'
 
 export function model(name: string, options?: SchemaOptions) {
   return (target: IMongooseClass): void => {
@@ -11,7 +11,7 @@ export function model(name: string, options?: SchemaOptions) {
   }
 }
 
-export function index(fields: IIndexArgs['fields'], options?: IndexOptions) {
+export function index(fields: Record<string, unknown>, options?: IndexOptions) {
   return (target: IMongooseClass): void => {
     getMongooseMeta(target.prototype).indexes
       .push({fields, options})
