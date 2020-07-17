@@ -37,16 +37,18 @@ export class MongooseMeta {
   public options: SchemaOptions = null
 }
 
+export const mongooseMeta = Symbol('MongooseMeta')
+
 export interface IMongooseClass extends Object {
-  __mongooseMeta__?: MongooseMeta
+  [mongooseMeta]?: MongooseMeta
 
   new(...args: unknown[]): unknown
 }
 
 export function getMongooseMeta(target: unknown): MongooseMeta {
-  if (!target['__mongooseMeta__']) {
-    target['__mongooseMeta__'] = new MongooseMeta()
+  if (!target[mongooseMeta]) {
+    target[mongooseMeta] = new MongooseMeta()
   }
 
-  return target['__mongooseMeta__']
+  return target[mongooseMeta]
 }

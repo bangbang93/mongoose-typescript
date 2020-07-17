@@ -1,6 +1,6 @@
 import {Schema, SchemaDefinition, SchemaTypeOpts, Types} from 'mongoose'
 import {getSchema, validators} from './index'
-import {Constructor, Fn, getMongooseMeta, IMongooseClass, PathDefinition, Prototype} from './meta'
+import {Constructor, Fn, getMongooseMeta, IMongooseClass, mongooseMeta, PathDefinition, Prototype} from './meta'
 import {getType} from './util'
 
 export function prop<T>(options: SchemaTypeOpts<T> & {type?: T} = {},
@@ -10,7 +10,7 @@ export function prop<T>(options: SchemaTypeOpts<T> & {type?: T} = {},
     type = type || pathSchema['type']
     if (!type && !options.type) {
       type = getType(target, name)
-      if (type['prototype']?.__mongooseMeta__ && !pathSchema['type']) {
+      if (type['prototype']?.[mongooseMeta] && !pathSchema['type']) {
         type = getSchema(type as IMongooseClass)
       }
     }
@@ -21,10 +21,10 @@ export function prop<T>(options: SchemaTypeOpts<T> & {type?: T} = {},
 export function array<T extends unknown>(type?: T, options?: SchemaTypeOpts<T[]>) {
   return (target: Prototype, name: string): void => {
     let t
-    if (type?.['prototype']?.__mongooseMeta__) {
+    if (type?.['prototype']?.[mongooseMeta]) {
       t = getSchema(type as unknown as IMongooseClass)
     }
-    if (type?.['type']?.['prototype']?.__mongooseMeta__) {
+    if (type?.['type']?.['prototype']?.[mongooseMeta]) {
       type['type'] = getSchema(type['type'] as IMongooseClass)
     }
     const path = getMongooseMeta(target).schema[name]
