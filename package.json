@@ -9,7 +9,7 @@
     "doc": "typedoc --out docs src && touch docs/.nojekyll",
     "prepublishOnly": "npm run build",
     "test": "mocha --require ts-node/register/transpile-only test/index.ts",
-    "lint": "tslint -p ."
+    "lint": "eslint --ext .js,.ts ."
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,9 @@
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "eslint": "^7.4.0",
     "mocha": "^7.1.1",
     "mongoose": "^5.7.5",
     "should": "^13.2.3",
@@ -39,6 +42,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "@sindresorhus/is": "^3.0.0",
     "@types/mongodb": "^3.5.25",
     "@types/mongoose": "^5.7.32",
     "reflect-metadata": "^0.1.12"

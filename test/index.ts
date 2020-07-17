@@ -2,7 +2,8 @@
 import * as mongoose from 'mongoose'
 import 'should'
 import {
-  array, getModel, getSchema, hidden, id, index, indexed, methods, middleware, Model, model, ModelType, ObjectId,
+  array, DocumentType, getModel, getSchema, hidden, id, index, indexed, methods, middleware, Model, model, ModelType,
+  ObjectId,
   plugin, prop, Ref, ref, refArray, required, statics, subModel, unique,
 } from '../src'
 
@@ -14,10 +15,10 @@ function testPlugin(schema: mongoose.Schema, options: any) {
 
 @subModel()
 class Address {
-  @prop() @required public country: string
-  @prop() @required public province: string
-  @prop() @required public city: string
-  @prop() @required public address: string
+  @prop() @required() public country: string
+  @prop() @required() public province: string
+  @prop() @required() public city: string
+  @prop() @required() public address: string
 }
 
 enum AccountRole {
@@ -26,7 +27,7 @@ enum AccountRole {
 }
 @subModel()
 class Account {
-  @prop() @required public name: string
+  @prop() @required() public name: string
   @prop() public role: AccountRole
 }
 
@@ -34,30 +35,30 @@ let hookRun = 0
 
 @model('some-string-id-model')
 class SomeStringIdModel {
-  @id
+  @id()
   public readonly _id: string
 }
 
 @model('user')
-@middleware<User>('findOne', 'pre', () => hookRun ++)
-@plugin(testPlugin, { testPlugin: true })
+@middleware<User>('findOne', 'pre', () => hookRun++)
+@plugin(testPlugin, {testPlugin: true})
 class User extends Model<User> {
-  @statics
-  public static async findByName(name: string): Promise<User> {
-    return this.findOne({username: name})
-  }
+  @id() public readonly _id: mongoose.Types.ObjectId
 
-  @id public readonly _id: mongoose.Types.ObjectId
-
-  @prop() @unique @required public username: string
-  @prop() @hidden public password: string
-  @prop() @indexed public loginCount: number
+  @prop() @unique() @required() public username: string
+  @prop() @hidden() public password: string
+  @prop() @indexed() public loginCount: number
   @array(Address) public addresses: Address[]
   @prop() public account: Account
   @ref(() => SomeStringIdModel, String) public someStringIdModel: Ref<SomeStringIdModel>
 
-  @methods
-  public addAddress(address: Address) {
+  @statics()
+  public static async findByName(name: string): Promise<User> {
+    return this.findOne({username: name})
+  }
+
+  @methods()
+  public addAddress(address: Address): this {
     this.addresses.push(address)
     return this
   }
@@ -66,38 +67,38 @@ class User extends Model<User> {
 @model('organization')
 @index({user: 1, name: 1}, {unique: true})
 class Organization extends Model<Organization> {
-  @statics
-  public static async listByUser(userId: string) {
+  @id() public readonly _id: mongoose.Types.ObjectId
+
+  @ref(() => User, ObjectId) @required() public user: Ref<User>
+  @prop() @unique() @required() public name: string
+  @refArray(() => User, ObjectId) public members: Array<Ref<User>>
+
+  @statics()
+  public static async listByUser(userId: string): Promise<DocumentType<Organization>[]> {
     return this.find({
       members: userId,
     })
   }
 
-  @id public readonly _id: mongoose.Types.ObjectId
-
-  @ref(() => User, ObjectId) @required public user: Ref<User>
-  @prop() @unique @required public name: string
-  @refArray(() => User, ObjectId) public members: Array<Ref<User>>
-
-  @methods
-  public async addMember(userId: mongoose.Types.ObjectId) {
+  @methods()
+  public async addMember(userId: mongoose.Types.ObjectId): Promise<this> {
     this.members.push(userId)
     return this.save()
   }
 }
 
-describe('User', function (this) {
+describe('User', () => {
   let UserModel: ModelType<User> & typeof User
-  it('getModel', function (this) {
+  it('getModel', () => {
     UserModel = getModel(User)
-    UserModel.should.hasOwnProperty('findByName')
+    UserModel.should.ownProperty('findByName')
   })
 
-  it('find', function (this) {
+  it('find', async () => {
     return UserModel.findByName('aaa')
   })
 
-  it('document', async function (this) {
+  it('document', async () => {
     const user = new UserModel({
       username: 'abc',
       password: 'wow',
@@ -123,28 +124,28 @@ describe('User', function (this) {
     user.addresses[0].country.should.eql('china')
 
     await user.save().should
-        .rejectedWith('user validation failed: addresses.0.province: Path `province` is required.')
+      .rejectedWith('user validation failed: addresses.0.province: Path `province` is required().')
   })
 
-  it('hook', function (this) {
+  it('hook', () => {
     hookRun.should.greaterThan(0)
   })
 
-  it('plugin', function (this) {
+  it('plugin', () => {
     (UserModel as any).testPluginFunc().testPlugin.should.eql(true)
   })
 })
 
-describe('organization', function (this) {
+describe('organization', () => {
   let OrganizationModel: typeof Organization
-  it('getModel', function (this) {
+  it('getModel', () => {
     const OrganizationSchema = getSchema(Organization)
     OrganizationModel = getModel(Organization)
-    OrganizationModel.should.hasOwnProperty('listByUser')
-    OrganizationSchema['paths'].members.casterConstructor.name.should.eql('ObjectId')
+    OrganizationModel.should.ownProperty('listByUser')
+    OrganizationSchema['paths'].members['casterConstructor'].name.should.eql('ObjectId')
   })
 })
 
-after(async function (this) {
+after(async () => {
   await mongoose.disconnect()
 })

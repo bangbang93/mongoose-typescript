@@ -3,7 +3,7 @@ import {SchemaOptions} from 'mongoose'
 import {getMongooseMeta, IIndexArgs, IMongooseClass, IPluginArgs} from './meta'
 
 export function model(name: string, options?: SchemaOptions) {
-  return (target: IMongooseClass) => {
+  return (target: IMongooseClass): void => {
     const meta = getMongooseMeta(target.prototype)
     meta.name = name
 
@@ -12,14 +12,14 @@ export function model(name: string, options?: SchemaOptions) {
 }
 
 export function index(fields: IIndexArgs['fields'], options?: IndexOptions) {
-  return (target: any) => {
+  return (target: IMongooseClass): void => {
     getMongooseMeta(target.prototype).indexes
       .push({fields, options})
   }
 }
 
 export function subModel(options: SchemaOptions & {name?: string} = {}) {
-  return (target: IMongooseClass) => {
+  return (target: IMongooseClass): void => {
     const meta = getMongooseMeta(target.prototype)
 
     if (options._id === undefined) {
@@ -31,7 +31,7 @@ export function subModel(options: SchemaOptions & {name?: string} = {}) {
 }
 
 export function plugin<T>(plugin: IPluginArgs<T>['plugin'], options?: IPluginArgs<T>['options']) {
-  return (target: any) => {
+  return (target: IMongooseClass): void => {
     getMongooseMeta(target.prototype).plugins
       .push({plugin, options})
   }

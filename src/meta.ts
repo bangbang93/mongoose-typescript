@@ -1,13 +1,20 @@
-import {Schema, SchemaOptions} from 'mongoose'
+import type {IndexOptions} from 'mongodb'
+import {Schema, SchemaOptions, SchemaType, SchemaTypeOpts} from 'mongoose'
 import {ActionType, HookType} from './middleware'
-import type { IndexOptions } from 'mongodb'
 
-export type Fn = (...args: any[]) => any
+export type Fn = (...args: unknown[]) => unknown
+export interface Constructor {
+  prototype: Prototype
+  new(...args: unknown[]): unknown
+}
+export type Prototype = unknown
 
 export interface IIndexArgs {
-  fields: any,
+  fields: Record<string, unknown>
   options: IndexOptions
 }
+
+export type PathDefinition<T = unknown> = SchemaTypeOpts<T> | Schema | SchemaType | {type?: T}
 
 export type IPluginType<T> = (schema: Schema, options?: T) => void
 
@@ -17,16 +24,15 @@ export interface IPluginArgs<T> {
 }
 
 export class MongooseMeta {
-
   public name: string
-  public schema: any = {}
+  public schema: Record<string, PathDefinition> = {}
   public statics: {[name: string]: Fn} = {}
   public methods: {[name: string]: Fn} = {}
   public virtuals: {[name: string]: PropertyDescriptor} = {}
   public queries: {[name: string]: Fn} = {}
   public indexes: IIndexArgs[] = []
   public middleware: Array<[ActionType, HookType, Fn]> = []
-  public plugins: Array<IPluginArgs<any>> = []
+  public plugins: Array<IPluginArgs<unknown>> = []
 
   public options: SchemaOptions = null
 }
@@ -34,13 +40,13 @@ export class MongooseMeta {
 export interface IMongooseClass extends Object {
   __mongooseMeta__?: MongooseMeta
 
-  new(...args: any[]): any
+  new(...args: unknown[]): unknown
 }
 
-export function getMongooseMeta(target: IMongooseClass): MongooseMeta {
-  if (!target.__mongooseMeta__) {
-    target.__mongooseMeta__ = new MongooseMeta()
+export function getMongooseMeta(target: unknown): MongooseMeta {
+  if (!target['__mongooseMeta__']) {
+    target['__mongooseMeta__'] = new MongooseMeta()
   }
 
-  return target.__mongooseMeta__
+  return target['__mongooseMeta__']
 }

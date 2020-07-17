@@ -15,7 +15,7 @@ export type ObjectId = Types.ObjectId
 
 export type DocumentType<T> = T & Document
 export type ModelType<T> = Model<DocumentType<T>>
-export type Ref<T extends {_id: any}> = T['_id'] | DocumentType<T>
+export type Ref<T extends {_id: unknown}> = T['_id'] | DocumentType<T>
 
 const modelCache = new WeakMap<IMongooseClass, ModelType<IMongooseClass>>()
 const schemaCache = new WeakMap<MongooseMeta, Schema>()
@@ -32,7 +32,6 @@ export function getSchema<T extends IMongooseClass>(modelClass: T): Schema {
 }
 
 export function getModel<T extends IMongooseClass>(modelClass: T): T {
-
   if (modelCache.has(modelClass)) {
     return modelCache.get(modelClass) as any
   }
@@ -49,7 +48,7 @@ function buildSchema(meta: MongooseMeta): Schema {
   Object.keys(meta.statics)
     .forEach((name) => {
       schema.statics[name] = meta.statics[name]
-  })
+    })
 
   Object.keys(meta.methods)
     .forEach((name) => {

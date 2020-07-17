@@ -8,12 +8,8 @@
     "noUnusedLocals": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "outDir": "lib",
-    "skipLibCheck": true
+    "outDir": "lib"
   },
-  "include": [
-    "src"
-  ],
   "exclude": [
     "node_modules"
   ]
