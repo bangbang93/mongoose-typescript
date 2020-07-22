@@ -47,6 +47,12 @@ export function getModelName<T extends IMongooseClass>(modelClass: T): string {
   return meta.name
 }
 
+export function forNestModule<T extends IMongooseClass>(modelClass: T): {name: string; schema: Schema} {
+  return {
+    name: getModelName(modelClass), schema: getSchema(modelClass),
+  }
+}
+
 function buildSchema(meta: MongooseMeta): Schema {
   const schema = new Schema(meta.schema, meta.options)
 
