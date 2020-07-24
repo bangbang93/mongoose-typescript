@@ -17,7 +17,7 @@ export type DocumentType<T> = T & Document
 export type ModelType<T> = Model<DocumentType<T>>
 export type Ref<T extends {_id: unknown}> = T['_id'] | DocumentType<T>
 
-const modelCache = new WeakMap<IMongooseClass, ModelType<IMongooseClass>>()
+const modelCache = new WeakMap<IMongooseClass, ModelType<InstanceType<IMongooseClass>>>()
 const schemaCache = new WeakMap<MongooseMeta, Schema>()
 
 export function getSchema<T extends IMongooseClass>(modelClass: T): Schema {
@@ -31,13 +31,13 @@ export function getSchema<T extends IMongooseClass>(modelClass: T): Schema {
   return schema
 }
 
-export function getModel<T extends IMongooseClass>(modelClass: T): ModelType<T> {
+export function getModel<T extends IMongooseClass>(modelClass: T): ModelType<InstanceType<T>> & T {
   if (modelCache.has(modelClass)) {
-    return modelCache.get(modelClass) as ModelType<T>
+    return modelCache.get(modelClass) as ModelType<InstanceType<T>> & T
   }
   const meta = getMongooseMeta(modelClass.prototype)
   if (!meta.name) throw new Error(`name not set for model ${modelClass.constructor.name}`)
-  const newModel: ModelType<T> = model(meta.name, getSchema(modelClass))
+  const newModel = model(meta.name, getSchema(modelClass)) as ModelType<InstanceType<T>> & T
   modelCache.set(modelClass, newModel)
   return newModel
 }

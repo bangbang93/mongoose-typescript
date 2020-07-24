@@ -2,7 +2,8 @@
 import * as mongoose from 'mongoose'
 import 'should'
 import {
-  array, DocumentType, getModel, getSchema, hidden, id, index, indexed, methods, middleware, Model, model, ModelType,
+  array, DocumentType, getModel, getModelName, getSchema, hidden, id, index, indexed, methods, middleware, Model, model,
+  ModelType,
   ObjectId,
   plugin, prop, Ref, ref, refArray, required, statics, subModel, unique,
 } from '../src'
@@ -38,6 +39,7 @@ class SomeStringIdModel {
   @id()
   public readonly _id: string
 }
+getModelName(SomeStringIdModel).should.eql('some-string-id-model')
 
 @model('user')
 @middleware<User>('findOne', 'pre', () => hookRun++)
@@ -63,6 +65,7 @@ class User extends Model<User> {
     return this
   }
 }
+getModelName(User).should.eql('user')
 
 @model('organization')
 @index({user: 1, name: 1}, {unique: true})
@@ -86,6 +89,7 @@ class Organization extends Model<Organization> {
     return this.save()
   }
 }
+getModelName(Organization).should.eql('organization')
 
 describe('User', () => {
   let UserModel: ModelType<User> & typeof User
@@ -124,7 +128,7 @@ describe('User', () => {
     user.addresses[0].country.should.eql('china')
 
     await user.save().should
-      .rejectedWith('user validation failed: addresses.0.province: Path `province` is required().')
+      .rejectedWith('user validation failed: addresses.0.province: Path `province` is required.')
   })
 
   it('hook', () => {
