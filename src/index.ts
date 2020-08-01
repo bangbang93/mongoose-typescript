@@ -13,7 +13,12 @@ export {default as validators} from './validator'
 export const ObjectId = Types.ObjectId
 export type ObjectId = Types.ObjectId
 
-export type DocumentType<T> = T & Document
+export type DocumentType<T> = {
+  [TKey in keyof T]:
+  T[TKey] extends Array<infer TValue> ? Types.Array<TValue> :
+    T[TKey] extends Buffer ? Types.Buffer :
+      T[TKey] extends Record<string, unknown> ? Types.Embedded & T[TKey] : T[TKey]
+} & Document
 export type ModelType<T> = Model<DocumentType<T>>
 export type Ref<T extends {_id: unknown}> = T['_id'] | DocumentType<T>
 
