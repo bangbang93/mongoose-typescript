@@ -3,10 +3,9 @@ import * as mongoose from 'mongoose'
 import 'should'
 import {
   array, DocumentType, getModel, getModelName, getSchema, hidden, id, index, indexed, methods, middleware, Model, model,
-  ModelType,
-  ObjectId,
-  plugin, prop, Ref, ref, refArray, required, statics, subModel, unique,
+  ModelType, ObjectId, plugin, prop, Ref, ref, refArray, required, statics, subModel, unique,
 } from '../src'
+import should = require('should')
 
 mongoose.connect('mongodb://localhost/test')
 
@@ -126,6 +125,7 @@ describe('User', () => {
     })
 
     user.addresses[0].country.should.eql('china')
+    should(user.addresses.pull).not.undefined()
 
     await user.save().should
       .rejectedWith('user validation failed: addresses.0.province: Path `province` is required.')
