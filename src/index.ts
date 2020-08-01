@@ -15,7 +15,7 @@ export type ObjectId = Types.ObjectId
 
 export type DocumentType<T> = {
   [TKey in keyof T]:
-  T[TKey] extends Array<infer TValue> ? Types.Array<TValue> :
+  T[TKey] extends Array<infer TValue> ? Types.Array<Types.Embedded & TValue> :
     T[TKey] extends Buffer ? Types.Buffer :
       T[TKey] extends Record<string, unknown> ? Types.Embedded & T[TKey] : T[TKey]
 } & Document

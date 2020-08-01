@@ -126,6 +126,7 @@ describe('User', () => {
 
     user.addresses[0].country.should.eql('china')
     should(user.addresses.pull).not.undefined()
+    should(user.addresses[0].toObject).not.undefined()
 
     await user.save().should
       .rejectedWith('user validation failed: addresses.0.province: Path `province` is required.')
