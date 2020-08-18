@@ -1,3 +1,4 @@
+import {Primitive} from '@sindresorhus/is'
 import {Document, model, Model, Schema, Types} from 'mongoose'
 import 'reflect-metadata'
 
@@ -13,9 +14,10 @@ export {default as validators} from './validator'
 export const ObjectId = Types.ObjectId
 export type ObjectId = Types.ObjectId
 
+type ArrayType<T> = T extends Primitive ? T : Types.Array<Types.Embedded & T>
 export type DocumentType<T> = {
   [TKey in keyof T]:
-  T[TKey] extends Array<infer TValue> ? Types.Array<Types.Embedded & TValue> :
+  T[TKey] extends Array<infer TValue> ? ArrayType<TValue> :
     T[TKey] extends Buffer ? Types.Buffer :
       T[TKey] extends Record<string, unknown> ? Types.Embedded & T[TKey] : T[TKey]
 } & Document
