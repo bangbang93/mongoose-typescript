@@ -22,7 +22,7 @@ export type DocumentType<T> = {
       T[TKey] extends Record<string, unknown> ? Types.Embedded & T[TKey] :
         T[TKey]
 } & Document
-export type ModelType<T> = Model<DocumentType<T>>
+export type ModelType<T> = Model<T & Document>
 export type Ref<T extends {_id: unknown}> = T['_id'] | DocumentType<T>
 
 const modelCache = new WeakMap<IMongooseClass, ModelType<InstanceType<IMongooseClass>>>()
