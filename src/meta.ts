@@ -1,5 +1,5 @@
 import type {IndexOptions} from 'mongodb'
-import {Schema, SchemaOptions, SchemaType, SchemaTypeOpts} from 'mongoose'
+import {Schema, SchemaOptions, SchemaTypeOptions} from 'mongoose'
 import {ActionType, HookType} from './middleware'
 
 export type Fn = (...args: unknown[]) => unknown
@@ -14,8 +14,6 @@ export interface IIndexArgs {
   options: IndexOptions
 }
 
-export type PathDefinition<T = unknown> = SchemaTypeOpts<T> | Schema | SchemaType | {type?: T}
-
 export type IPluginType<T> = (schema: Schema, options?: T) => void
 
 export interface IPluginArgs<T> {
@@ -25,7 +23,7 @@ export interface IPluginArgs<T> {
 
 export class MongooseMeta {
   public name: string
-  public schema: Record<string, PathDefinition> = {}
+  public schema: Record<string, SchemaTypeOptions<unknown>> = {}
   public statics: {[name: string]: Fn} = {}
   public methods: {[name: string]: Fn} = {}
   public virtuals: {[name: string]: PropertyDescriptor} = {}

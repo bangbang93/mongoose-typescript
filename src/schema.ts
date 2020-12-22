@@ -1,12 +1,12 @@
 import {Schema, SchemaDefinition, SchemaTypeOpts, Types} from 'mongoose'
 import {getSchema, validators} from './index'
-import {Constructor, Fn, getMongooseMeta, IMongooseClass, mongooseMeta, PathDefinition, Prototype} from './meta'
+import {Constructor, Fn, getMongooseMeta, IMongooseClass, mongooseMeta, Prototype} from './meta'
 import {getType} from './util'
 
 export function prop<T>(options: SchemaTypeOpts<T> & {type?: T} = {},
   type?: SchemaDefinition['type']): PropertyDecorator {
   return (target: Prototype, name: string) => {
-    const pathSchema: PathDefinition = getMongooseMeta(target).schema[name] || {}
+    const pathSchema = getMongooseMeta(target).schema[name] || {}
     type = type || pathSchema['type']
     if (!type && !options.type) {
       type = getType(target, name)
@@ -28,7 +28,7 @@ export function array<T extends unknown>(type?: T, options?: SchemaTypeOpts<T[]>
       type['type'] = getSchema(type['type'] as IMongooseClass)
     }
     const path = getMongooseMeta(target).schema[name]
-    if (!type) type = path['type']
+    if (!type) type = path['type'] as T
     if (type === Types.ObjectId) {
       t = Schema.Types.ObjectId
     }

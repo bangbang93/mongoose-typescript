@@ -14,13 +14,14 @@ export {default as validators} from './validator'
 export const ObjectId = Types.ObjectId
 export type ObjectId = Types.ObjectId
 
-type ArrayType<T> = T extends Primitive ? Types.Array<T> : Types.Array<Types.Embedded & T>
+type ArrayType<T> = T extends Primitive ? Types.Array<T> : Types.Array<Types.EmbeddedDocument & T>
 export type DocumentType<T> = {
   [TKey in keyof T]:
   T[TKey] extends Array<infer TValue> ? ArrayType<TValue> :
     T[TKey] extends Buffer ? Types.Buffer :
-      T[TKey] extends Record<string, unknown> ? Types.Embedded & T[TKey] :
-        T[TKey]
+      T[TKey] extends Date ? Date :
+        T[TKey] extends Record<string, unknown> ? Types.EmbeddedDocument & T[TKey] :
+          T[TKey]
 } & Document
 export type ModelType<T> = Model<DocumentType<T>>
 export type Ref<T extends {_id: unknown}> = T['_id'] | DocumentType<T>
@@ -41,12 +42,12 @@ export function getSchema<T extends IMongooseClass>(modelClass: T): Schema {
 
 export function getModel<T extends IMongooseClass>(modelClass: T): ModelType<InstanceType<T>> & T {
   if (modelCache.has(modelClass)) {
-    return modelCache.get(modelClass) as ModelType<InstanceType<T>> & T
+    return modelCache.get(modelClass) as unknown as ModelType<InstanceType<T>> & T
   }
   const meta = getMongooseMeta(modelClass.prototype)
   if (!meta.name) throw new Error(`name not set for model ${modelClass.constructor.name}`)
-  const newModel = model(meta.name, getSchema(modelClass)) as ModelType<InstanceType<T>> & T
-  modelCache.set(modelClass, newModel)
+  const newModel = model(meta.name, getSchema(modelClass)) as unknown as ModelType<InstanceType<T>> & T
+  modelCache.set(modelClass, newModel as any)
   return newModel
 }
 
