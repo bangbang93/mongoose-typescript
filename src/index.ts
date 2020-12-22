@@ -15,7 +15,8 @@ export const ObjectId = Types.ObjectId
 export type ObjectId = Types.ObjectId
 
 type ArrayType<T> = T extends Primitive ? Types.Array<T> : Types.Array<Types.EmbeddedDocument & T>
-export type DocumentType<T> = {
+export type DocumentType<T> = T & Document
+export type RichDocumentType<T> = {
   [TKey in keyof T]:
   T[TKey] extends Array<infer TValue> ? ArrayType<TValue> :
     T[TKey] extends Buffer ? Types.Buffer :
