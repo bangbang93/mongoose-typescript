@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose'
 import 'should'
 import {
   array, DocumentType, getModel, getModelName, getSchema, hidden, id, index, indexed, methods, middleware, Model, model,
-  ModelType, ObjectId, plugin, prop, Ref, ref, refArray, required, statics, subModel, unique,
+  ModelType, ObjectId, plugin, prop, Ref, ref, refArray, required, RichDocumentType, statics, subModel, unique,
 } from '../src'
 import should = require('should')
 
@@ -113,7 +113,7 @@ describe('User', () => {
       account: {
         name: 'aaa',
       },
-    })
+    }) as RichDocumentType<User>
 
     user.someStringIdModel = 'a'
 
