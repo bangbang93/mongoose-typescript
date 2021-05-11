@@ -195,6 +195,11 @@ export function methods(): PropertyDecorator {
 
 export function virtual(): MethodDecorator {
   return (target: Prototype, name: string, descriptor: PropertyDescriptor) => {
+    if (descriptor.value) {
+      if (typeof descriptor.value !== 'function') {
+        throw new TypeError('virtual can only used on class method or getter/setter')
+      }
+    }
     getMongooseMeta(target).virtuals[name] = descriptor
   }
 }
