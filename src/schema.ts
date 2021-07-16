@@ -35,7 +35,7 @@ export function array<T extends unknown>(type?: T, options?: SchemaTypeOpts<T[]>
       t = Schema.Types.ObjectId
     }
     t = t ?? type
-    getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ...options, type: [t]}
+    getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ...options, type: t ? [t] : []}
   }
 }
 
