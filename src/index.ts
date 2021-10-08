@@ -14,14 +14,14 @@ export {default as validators} from './validator'
 export const ObjectId = Types.ObjectId
 export type ObjectId = Types.ObjectId
 
-type ArrayType<T> = T extends Primitive ? Types.Array<T> : Types.Array<Types.EmbeddedDocument & T>
+type ArrayType<T> = T extends Primitive ? Types.Array<T> : Types.Array<Types.Subdocument & T>
 export type DocumentType<T> = T & Document
 export type RichDocumentType<T> = {
   [TKey in keyof T]:
   T[TKey] extends Array<infer TValue> ? ArrayType<TValue> :
     T[TKey] extends Buffer ? Types.Buffer :
       T[TKey] extends Date ? Date :
-        T[TKey] extends Record<string, unknown> ? Types.EmbeddedDocument & T[TKey] :
+        T[TKey] extends Record<string, unknown> ? Types.Subdocument & T[TKey] :
           T[TKey]
 } & Document
 export type ModelType<T> = Model<DocumentType<T>>

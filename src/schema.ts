@@ -1,9 +1,9 @@
-import {Schema, SchemaDefinition, SchemaTypeOpts, Types} from 'mongoose'
+import {Schema, SchemaDefinition, SchemaTypeOptions, Types} from 'mongoose'
 import {getSchema, validators} from './index'
 import {Constructor, Fn, getMongooseMeta, IMongooseClass, mongooseMeta, Prototype} from './meta'
 import {getType} from './util'
 
-type SchemaType<T> = Omit<SchemaTypeOpts<T>, 'type'> & {type?: T}
+type SchemaType<T> = Omit<SchemaTypeOptions<T>, 'type'> & {type?: T}
 
 export function prop<T>(options: SchemaType<T> = {},
   type?: SchemaDefinition['type']): PropertyDecorator {
@@ -20,7 +20,7 @@ export function prop<T>(options: SchemaType<T> = {},
   }
 }
 
-export function array<T extends unknown>(type?: T, options?: SchemaTypeOpts<T[]>) {
+export function array<T extends unknown>(type?: T, options?: SchemaTypeOptions<T[]>) {
   return (target: Prototype, name: string): void => {
     let t
     if (type?.['prototype']?.[mongooseMeta]) {
@@ -204,7 +204,7 @@ export function virtual(): MethodDecorator {
   }
 }
 
-export function mongoId<T>(options: SchemaTypeOpts<T> & {type?: T} = {}, type?: T): PropertyDecorator {
+export function mongoId<T>(options: SchemaTypeOptions<T> & {type?: T} = {}, type?: T): PropertyDecorator {
   options = {validate: validators.mongoId, ...options}
   return prop(options, type)
 }

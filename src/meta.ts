@@ -1,5 +1,4 @@
-import type {IndexOptions} from 'mongodb'
-import {Schema, SchemaOptions, SchemaTypeOptions} from 'mongoose'
+import {IndexDirection, IndexOptions, Schema, SchemaOptions, SchemaTypeOptions} from 'mongoose'
 import {ActionType, HookType} from './middleware'
 
 export type Fn = (...args: unknown[]) => unknown
@@ -10,7 +9,7 @@ export interface Constructor {
 export type Prototype = unknown
 
 export interface IIndexArgs {
-  fields: Record<string, unknown>
+  fields: Record<string, IndexDirection>
   options: IndexOptions
 }
 

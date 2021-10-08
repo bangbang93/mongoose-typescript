@@ -43,7 +43,6 @@
   },
   "dependencies": {
     "@sindresorhus/is": "^3.0.0",
-    "@types/mongodb": "^3.5.25",
     "reflect-metadata": "^0.1.12"
   },
   "files": [
