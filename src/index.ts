@@ -16,14 +16,14 @@ export type ObjectId = Types.ObjectId
 
 type ArrayType<T> = T extends Primitive ? Types.Array<T> : Types.Array<Types.Subdocument & T>
 export type DocumentType<T extends {_id?: unknown}> = T & Document<T['_id']>
-export type RichDocumentType<T> = {
+export type RichDocumentType<T extends {_id?: unknown}> = {
   [TKey in keyof T]:
   T[TKey] extends Array<infer TValue> ? ArrayType<TValue> :
     T[TKey] extends Buffer ? Types.Buffer :
       T[TKey] extends Date ? Date :
         T[TKey] extends Record<string, unknown> ? Types.Subdocument & T[TKey] :
           T[TKey]
-} & Document
+} & Document<T['_id']>
 export type ModelType<T> = Model<DocumentType<T>>
 export type Ref<T extends {_id?: unknown}> = T['_id'] | DocumentType<T>
 
