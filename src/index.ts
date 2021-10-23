@@ -24,7 +24,7 @@ export type RichDocumentType<T extends {_id?: unknown}> = {
         T[TKey] extends Record<string, unknown> ? Types.Subdocument & T[TKey] :
           T[TKey]
 } & Document<T['_id']>
-export type ModelType<T, TModel = unknown, THelper = unknown> = Model<DocumentType<T>, THelper, TModel>
+export type ModelType<T, THelper = unknown> = Model<DocumentType<T>, THelper>
 export type Ref<T extends {_id?: unknown}> = T['_id'] | T
 export type RefDocument<T extends {_id?: unknown}> = T['_id'] | DocumentType<T>
 
