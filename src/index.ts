@@ -24,10 +24,11 @@ export type RichDocumentType<T extends {_id?: unknown}> = {
         T[TKey] extends Record<string, unknown> ? Types.Subdocument & T[TKey] :
           T[TKey]
 } & Document<T['_id']>
-export type ModelType<T> = Model<DocumentType<T>>
-export type Ref<T extends {_id?: unknown}> = T['_id'] | DocumentType<T>
+export type ModelType<T, TModel = unknown, THelper = unknown> = Model<DocumentType<T>, THelper, TModel>
+export type Ref<T extends {_id?: unknown}> = T['_id'] | T
+export type RefDocument<T extends {_id?: unknown}> = T['_id'] | DocumentType<T>
 
-const modelCache = new WeakMap<IMongooseClass, ModelType<InstanceType<IMongooseClass>>>()
+const modelCache = new WeakMap<IMongooseClass, ModelType<InstanceType<IMongooseClass>, IMongooseClass>>()
 const schemaCache = new WeakMap<MongooseMeta, Schema>()
 
 export function getSchema<T extends IMongooseClass>(modelClass: T): Schema {
