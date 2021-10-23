@@ -98,7 +98,10 @@ export function ref(nameOrClass: string | IMongooseClass | LazyClass, idType?: u
       getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], ref: nameOrClass, type: idType}
     }
   } else if ('prototype' in nameOrClass && !!nameOrClass.prototype.constructor.name) {
-    return (target: unknown, name: string) => {
+    return (target: Record<string, unknown>, name: string) => {
+      if (nameOrClass === undefined) {
+        throw new Error(`${target.constructor.name}.${name} reference type is undefined, maybe circular dependence`)
+      }
       const field = getMongooseMeta(target).schema[name] || {}
       const isArray = Array.isArray(field['type'])
       if (field['type'] === undefined || idType || isArray && field['type'][0] === undefined) {
