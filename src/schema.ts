@@ -1,13 +1,14 @@
 import {Schema, SchemaDefinition, SchemaTypeOptions, Types} from 'mongoose'
+import {Constructor} from 'type-fest'
 import {getSchema, validators} from './index'
-import {Constructor, Fn, getMongooseMeta, IMongooseClass, mongooseMeta, Prototype} from './meta'
+import {Fn, getMongooseMeta, IMongooseClass, mongooseMeta} from './meta'
 import {getType} from './util'
 
 type SchemaType<T> = Omit<SchemaTypeOptions<T>, 'type'> & {type?: T}
 
 export function prop<T>(options: SchemaType<T> = {},
   type?: SchemaDefinition['type']): PropertyDecorator {
-  return (target: Prototype, name: string) => {
+  return (target: unknown, name: string) => {
     const pathSchema = getMongooseMeta(target).schema[name] || {}
     type = type || pathSchema['type']
     if (!type && !options.type) {
@@ -21,7 +22,7 @@ export function prop<T>(options: SchemaType<T> = {},
 }
 
 export function array<T extends unknown>(type?: T, options?: SchemaTypeOptions<T[]>) {
-  return (target: Prototype, name: string): void => {
+  return (target: unknown, name: string): void => {
     let t
     if (type?.['prototype']?.[mongooseMeta]) {
       t = getSchema(type as unknown as IMongooseClass)
@@ -40,47 +41,47 @@ export function array<T extends unknown>(type?: T, options?: SchemaTypeOptions<T
 }
 
 export function id(): PropertyDecorator {
-  return (target: Prototype, name: string) => {/* empty */}
+  return (target: unknown, name: string) => {/* empty */}
 }
 
 export function required(): PropertyDecorator {
-  return (target: Prototype, name: string) => {
+  return (target: unknown, name: string) => {
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], required: true}
   }
 }
 
 export function indexed(): PropertyDecorator {
-  return (target: Prototype, name: string) => {
+  return (target: unknown, name: string) => {
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], index: true}
   }
 }
 
 export function hidden(): PropertyDecorator {
-  return (target: Prototype, name: string) => {
+  return (target: unknown, name: string) => {
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], select: false}
   }
 }
 
 export function unique(): PropertyDecorator {
-  return (target: Prototype, name: string) => {
+  return (target: unknown, name: string) => {
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], unique: true}
   }
 }
 
 export function defaults<T>(value: T): PropertyDecorator {
-  return (target: Prototype, name: string) => {
+  return (target: unknown, name: string) => {
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], default: value}
   }
 }
 
-export function type(type: Prototype): PropertyDecorator {
+export function type(type: unknown): PropertyDecorator {
   return (target: unknown, name: string) => {
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], type}
   }
 }
 
 export function enums(values: Array<string | number> | Record<string | number, string | number>): PropertyDecorator {
-  return (target: Prototype, name: string) => {
+  return (target: unknown, name: string) => {
     if (!Array.isArray(values)) {
       values = Object.values(values)
     }
@@ -88,7 +89,7 @@ export function enums(values: Array<string | number> | Record<string | number, s
   }
 }
 
-type LazyClass = () => Constructor
+type LazyClass = () => Constructor<unknown>
 
 export function ref(nameOrClass: string | LazyClass, idType: unknown)
 export function ref(nameOrClass: IMongooseClass, idType?: unknown)
@@ -119,7 +120,7 @@ export function ref(nameOrClass: string | IMongooseClass | LazyClass, idType?: u
       getMongooseMeta(target).schema[name] = {...field, ref: getMongooseMeta(nameOrClass.prototype).name}
     }
   } else {
-    return (target: Prototype, name: string) => {
+    return (target: unknown, name: string) => {
       const field = getMongooseMeta(target).schema[name] || {}
       const isArray = Array.isArray(field['type'])
       if (isArray && !Array.isArray(idType)) {
@@ -179,25 +180,25 @@ export function refArray(nameOrClass: string | LazyClass | IMongooseClass, eleme
 }
 
 export function statics(): PropertyDecorator {
-  return (target: Constructor, name: string) => {
+  return (target: Constructor<unknown>, name: string) => {
     getMongooseMeta(target.prototype).statics[name] = target[name]
   }
 }
 
 export function query(): PropertyDecorator {
-  return (target: Constructor, name: string) => {
+  return (target: Constructor<unknown>, name: string) => {
     getMongooseMeta(target.prototype).queries[name] = target[name]
   }
 }
 
 export function methods(): PropertyDecorator {
-  return (target: Prototype, name: string) => {
+  return (target: unknown, name: string) => {
     getMongooseMeta(target).methods[name] = target[name] as Fn
   }
 }
 
 export function virtual(): MethodDecorator {
-  return (target: Prototype, name: string, descriptor: PropertyDescriptor) => {
+  return (target: unknown, name: string, descriptor: PropertyDescriptor) => {
     if (descriptor.value) {
       if (typeof descriptor.value !== 'function') {
         throw new TypeError('virtual can only used on class method or getter/setter')
