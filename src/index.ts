@@ -1,6 +1,7 @@
 import {Primitive} from '@sindresorhus/is'
 import {Document, model, Model, Schema, Types} from 'mongoose'
 import 'reflect-metadata'
+import {Constructor} from 'type-fest'
 
 import {Fn, getMongooseMeta, IMongooseClass, MongooseMeta} from './meta'
 import {ActionType, HookType} from './middleware'
@@ -24,11 +25,13 @@ export type RichDocumentType<T extends {_id?: unknown}> = {
         T[TKey] extends Record<string, unknown> ? Types.Subdocument & T[TKey] :
           T[TKey]
 } & Document<T['_id']>
+/** @deprecated use RichModelType<typeof ModelClass> */
 export type ModelType<T, THelper = unknown> = Model<DocumentType<T>, THelper>
+export type RichModelType<T extends Constructor<unknown>, THelper = unknown> = Model<InstanceType<T>, THelper> & T
 export type Ref<T extends {_id?: unknown}> = T['_id'] | T
 export type RefDocument<T extends {_id?: unknown}> = T['_id'] | DocumentType<T>
 
-const modelCache = new WeakMap<IMongooseClass, ModelType<InstanceType<IMongooseClass>, IMongooseClass>>()
+const modelCache = new WeakMap<IMongooseClass, RichModelType<IMongooseClass>>()
 const schemaCache = new WeakMap<MongooseMeta, Schema>()
 
 export function getSchema<T extends IMongooseClass>(modelClass: T): Schema {
@@ -42,14 +45,14 @@ export function getSchema<T extends IMongooseClass>(modelClass: T): Schema {
   return schema
 }
 
-export function getModel<T extends IMongooseClass>(modelClass: T): ModelType<InstanceType<T>> & T {
+export function getModel<T extends IMongooseClass>(modelClass: T): RichModelType<T> {
   if (modelCache.has(modelClass)) {
-    return modelCache.get(modelClass) as unknown as ModelType<InstanceType<T>> & T
+    return modelCache.get(modelClass) as RichModelType<T>
   }
   const meta = getMongooseMeta(modelClass.prototype)
   if (!meta.name) throw new Error(`name not set for model ${modelClass.constructor.name}`)
-  const newModel = model(meta.name, getSchema(modelClass)) as unknown as ModelType<InstanceType<T>> & T
-  modelCache.set(modelClass, newModel as any)
+  const newModel = model(meta.name, getSchema(modelClass)) as RichModelType<T>
+  modelCache.set(modelClass, newModel)
   return newModel
 }
 

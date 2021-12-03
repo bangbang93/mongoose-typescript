@@ -2,11 +2,6 @@ import {IndexDirection, IndexOptions, Schema, SchemaOptions, SchemaTypeOptions} 
 import {ActionType, HookType} from './middleware'
 
 export type Fn = (...args: unknown[]) => unknown
-export interface Constructor {
-  prototype: Prototype
-  new(...args: unknown[]): unknown
-}
-export type Prototype = unknown
 
 export interface IIndexArgs {
   fields: Record<string, IndexDirection>

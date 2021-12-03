@@ -1,9 +1,9 @@
-// tslint:disable:no-console
 import * as mongoose from 'mongoose'
 import 'should'
 import {
   array, DocumentType, getModel, getModelName, getSchema, hidden, id, index, indexed, methods, middleware, Model, model,
-  ModelType, ObjectId, plugin, prop, Ref, ref, refArray, required, RichDocumentType, statics, subModel, unique,
+  ModelType, ObjectId, plugin, prop, Ref, ref, refArray, required, RichDocumentType, RichModelType, statics, subModel,
+  unique,
 } from '../src'
 import should = require('should')
 
@@ -91,7 +91,7 @@ class Organization extends Model<Organization> {
 getModelName(Organization).should.eql('organization')
 
 describe('User', () => {
-  let UserModel: ModelType<User> & typeof User
+  let UserModel: RichModelType<typeof User>
   it('getModel', () => {
     UserModel = getModel(User)
     UserModel.should.ownProperty('findByName')
@@ -142,7 +142,7 @@ describe('User', () => {
 })
 
 describe('organization', () => {
-  let OrganizationModel: typeof Organization
+  let OrganizationModel: ModelType<Organization>
   it('getModel', () => {
     const OrganizationSchema = getSchema(Organization)
     OrganizationModel = getModel(Organization)
