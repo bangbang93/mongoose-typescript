@@ -124,6 +124,12 @@ describe('User', () => {
       address: 'cuiyuan',
     })
 
+    await UserModel.findByIdAndUpdate(new ObjectId(), {
+      $set: {
+        password: 'bar',
+      },
+    })
+
     user.addresses[0].country.should.eql('china')
     should(user.addresses.pull).not.undefined()
     should(user.addresses[0].toObject).not.undefined()
