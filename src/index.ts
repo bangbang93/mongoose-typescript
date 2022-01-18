@@ -16,7 +16,7 @@ export const ObjectId = Types.ObjectId
 export type ObjectId = Types.ObjectId
 
 type ArrayType<T> = T extends Primitive ? Types.Array<T> : Types.Array<Types.Subdocument & T>
-export type DocumentType<T extends {_id?: unknown}> = T & Document<T['_id'], any, T>
+export type DocumentType<T extends {_id?: TId}, TId = unknown> = T & Document<T['_id'], any, T>
 export type RichDocumentType<T extends {_id?: unknown}> = {
   [TKey in keyof T]:
   T[TKey] extends Array<infer TValue> ? ArrayType<TValue> :

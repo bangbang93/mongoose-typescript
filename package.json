@@ -27,7 +27,7 @@
     "decrator"
   ],
   "peerDependencies": {
-    "mongoose": "^6.0.14"
+    "mongoose": "^6.1.7"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
