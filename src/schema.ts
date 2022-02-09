@@ -10,8 +10,8 @@ export function prop<T>(options: SchemaType<T> = {},
   type?: SchemaDefinition['type']): PropertyDecorator {
   return (target: unknown, name: string) => {
     const pathSchema = getMongooseMeta(target).schema[name] || {}
-    type = type || pathSchema['type']
-    if (!type && !options.type) {
+    type = type || pathSchema['type'] || options.type
+    if (!type) {
       type = getType(target, name)
     }
     if (type['prototype']?.[mongooseMeta] && !pathSchema['type']) {
