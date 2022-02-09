@@ -13,9 +13,9 @@ export function prop<T>(options: SchemaType<T> = {},
     type = type || pathSchema['type']
     if (!type && !options.type) {
       type = getType(target, name)
-      if (type['prototype']?.[mongooseMeta] && !pathSchema['type']) {
-        type = getSchema(type as IMongooseClass)
-      }
+    }
+    if (type['prototype']?.[mongooseMeta] && !pathSchema['type']) {
+      type = getSchema(type as IMongooseClass)
     }
     getMongooseMeta(target).schema[name] = {...pathSchema, ...options, ...type ? {type} : {}}
   }
@@ -76,6 +76,9 @@ export function defaults<T>(value: T): PropertyDecorator {
 
 export function type(type: unknown): PropertyDecorator {
   return (target: unknown, name: string) => {
+    if (type['prototype']?.[mongooseMeta]) {
+      type = getSchema(type as IMongooseClass)
+    }
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], type}
   }
 }
