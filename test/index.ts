@@ -15,7 +15,7 @@ function testPlugin(schema: mongoose.Schema, options: any) {
 
 @subModel()
 class Address {
-  @prop() @required() public country: string
+  @prop({maxlength: 10}) @required() public country: string
   @prop() @required() public province: string
   @prop() @required() public city: string
   @prop() @required() public address: string

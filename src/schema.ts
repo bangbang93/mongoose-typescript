@@ -4,9 +4,7 @@ import {getSchema, validators} from './index'
 import {Fn, getMongooseMeta, IMongooseClass, mongooseMeta} from './meta'
 import {getType} from './util'
 
-type SchemaType<T> = Omit<SchemaTypeOptions<T>, 'type'> & {type?: T}
-
-export function prop<T>(options: SchemaType<T> = {},
+export function prop<T>(options: SchemaTypeOptions<T> = {},
   type?: SchemaDefinition['type']): PropertyDecorator {
   return (target: unknown, name: string) => {
     const pathSchema = getMongooseMeta(target).schema[name] || {}
