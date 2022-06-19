@@ -43,7 +43,7 @@
   "dependencies": {
     "@sindresorhus/is": "^4.2.0",
     "reflect-metadata": "^0.1.13",
-    "type-fest": "^2.8.0"
+    "type-fest": "^2.11.1"
   },
   "files": [
     "lib/**"
