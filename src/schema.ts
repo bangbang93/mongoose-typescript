@@ -149,22 +149,22 @@ export function refArray(nameOrClass: string | LazyClass | IMongooseClass, eleme
     return (target: unknown, name: string) => {
       getMongooseMeta(target).schema[name] = {
         ...getMongooseMeta(target).schema[name],
-        type: {type: [elementType], ref: nameOrClass},
+        type: [{type: elementType, ref: nameOrClass}],
       }
     }
   } else if ('prototype' in nameOrClass && !!nameOrClass.prototype.constructor.name) {
     return (target: unknown, name: string) => {
       getMongooseMeta(target).schema[name] = {
         ...getMongooseMeta(target).schema[name],
-        type: {type: [elementType], ref: getMongooseMeta(nameOrClass.prototype).name},
+        type: [{type: elementType, ref: getMongooseMeta(nameOrClass.prototype).name}],
       }
     }
   } else {
     return (target: unknown, name: string) => {
       getMongooseMeta(target).schema[name] = {
         ...getMongooseMeta(target).schema[name],
-        type: {
-          type: [elementType],
+        type: [{
+          type: elementType,
           ref: () => {
             const clazz = (nameOrClass as LazyClass)()
             const type = elementType || getType(clazz.prototype, '_id')
@@ -174,7 +174,7 @@ export function refArray(nameOrClass: string | LazyClass | IMongooseClass, eleme
             }
             return getMongooseMeta(clazz.prototype).name
           },
-        },
+        }],
       }
     }
   }
