@@ -149,14 +149,14 @@ export function refArray(nameOrClass: string | LazyClass | IMongooseClass, eleme
     return (target: unknown, name: string) => {
       getMongooseMeta(target).schema[name] = {
         ...getMongooseMeta(target).schema[name],
-        type: [{type: [elementType], ref: nameOrClass}],
+        type: {type: [elementType], ref: nameOrClass},
       }
     }
   } else if ('prototype' in nameOrClass && !!nameOrClass.prototype.constructor.name) {
     return (target: unknown, name: string) => {
       getMongooseMeta(target).schema[name] = {
         ...getMongooseMeta(target).schema[name],
-        type: [{type: [elementType], ref: getMongooseMeta(nameOrClass.prototype).name}],
+        type: {type: [elementType], ref: getMongooseMeta(nameOrClass.prototype).name},
       }
     }
   } else {
