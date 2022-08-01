@@ -163,7 +163,7 @@ export function refArray(nameOrClass: string | LazyClass | IMongooseClass, eleme
     return (target: unknown, name: string) => {
       getMongooseMeta(target).schema[name] = {
         ...getMongooseMeta(target).schema[name],
-        type: [{
+        type: {
           type: [elementType],
           ref: () => {
             const clazz = (nameOrClass as LazyClass)()
@@ -174,7 +174,7 @@ export function refArray(nameOrClass: string | LazyClass | IMongooseClass, eleme
             }
             return getMongooseMeta(clazz.prototype).name
           },
-        }],
+        },
       }
     }
   }
