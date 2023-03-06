@@ -68,7 +68,7 @@ export function forNestModule<T extends IMongooseClass>(modelClass: T): {name: s
   }
 }
 
-function buildSchema(meta: MongooseMeta): Schema {
+function buildSchema<T>(meta: MongooseMeta): Schema<T> {
   const schema = new Schema(meta.schema, meta.options)
 
   Object.keys(meta.statics)
