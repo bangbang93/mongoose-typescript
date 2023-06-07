@@ -1,7 +1,7 @@
 import {Primitive} from '@sindresorhus/is'
 import {Document, HydratedDocument, model, Model, Schema, Types} from 'mongoose'
 import 'reflect-metadata'
-import {Constructor} from 'type-fest'
+import {Class, Constructor} from 'type-fest'
 
 import {Fn, getMongooseMeta, IMongooseClass, MongooseMeta} from './meta'
 import {ActionType, HookType} from './middleware'
@@ -27,42 +27,41 @@ export type RichDocumentType<T extends {_id?: unknown}> = {
           T[TKey]
 } & Document<T['_id']>
 /** @deprecated use RichModelType<typeof ModelClass> */
-export type ModelType<T, THelper = unknown> = Model<DocumentType<T>, THelper>
-export type RichModelType<T extends Constructor<unknown>, THelper = unknown> = Model<InstanceType<T>, THelper> & T
+export type ModelType<T, THelper = object> = Model<DocumentType<T>, THelper>
+export type RichModelType<T extends Constructor<object>, THelper = object> = Model<InstanceType<T>, THelper> & T
 export type Ref<T extends {_id?: unknown}> = T['_id'] | T
 export type RefDocument<T extends {_id?: unknown}> = T['_id'] | DocumentType<T>
 
-const modelCache = new WeakMap<IMongooseClass, RichModelType<IMongooseClass>>()
+const modelCache = new WeakMap<Class<unknown>, RichModelType<IMongooseClass>>()
 const schemaCache = new WeakMap<MongooseMeta, Schema>()
 
-export function getSchema<T extends IMongooseClass>(modelClass: T): Schema {
+export function getSchema<T>(modelClass: Class<T>): Schema {
   const meta = getMongooseMeta(modelClass.prototype)
-  if (schemaCache.has(meta)) {
-    return schemaCache.get(meta)
-  }
+  let schema = schemaCache.get(meta)
+  if (schema) return schema
 
-  const schema = buildSchema(meta)
+  schema = buildSchema(meta)
   schemaCache.set(meta, schema)
   return schema
 }
 
-export function getModel<T extends IMongooseClass>(modelClass: T): RichModelType<T> {
+export function getModel<T extends Constructor<object>>(modelClass: T): RichModelType<T> {
   if (modelCache.has(modelClass)) {
-    return modelCache.get(modelClass) as RichModelType<T>
+    return modelCache.get(modelClass) as unknown as RichModelType<T>
   }
   const meta = getMongooseMeta(modelClass.prototype)
   if (!meta.name) throw new Error(`name not set for model ${modelClass.constructor.name}`)
-  const newModel = model(meta.name, getSchema(modelClass)) as RichModelType<T>
-  modelCache.set(modelClass, newModel)
+  const newModel = model(meta.name, getSchema(modelClass)) as unknown as RichModelType<T>
+  modelCache.set(modelClass, newModel as unknown as RichModelType<IMongooseClass>)
   return newModel
 }
 
-export function getModelName<T extends IMongooseClass>(modelClass: T): string {
+export function getModelName<T extends Constructor<object>>(modelClass: T): string {
   const meta = getMongooseMeta(modelClass.prototype)
   return meta.name
 }
 
-export function forNestModule<T extends IMongooseClass>(modelClass: T): {name: string; schema: Schema} {
+export function forNestModule<T extends Constructor<object>>(modelClass: T): {name: string; schema: Schema} {
   return {
     name: getModelName(modelClass), schema: getSchema(modelClass),
   }
@@ -71,20 +70,10 @@ export function forNestModule<T extends IMongooseClass>(modelClass: T): {name: s
 function buildSchema<T>(meta: MongooseMeta): Schema<T> {
   const schema = new Schema(meta.schema, meta.options)
 
-  Object.keys(meta.statics)
-    .forEach((name) => {
-      schema.statics[name] = meta.statics[name]
-    })
+  Object.assign(schema.statics, meta.statics)
+  Object.assign(schema.methods, meta.methods)
+  Object.assign(schema.query, meta.queries)
 
-  Object.keys(meta.methods)
-    .forEach((name) => {
-      schema.methods[name] = meta.methods[name]
-    })
-
-  Object.keys(meta.queries)
-    .forEach((name) => {
-      schema.query[name] = meta.queries[name]
-    })
 
   Object.keys(meta.virtuals)
     .forEach((name) => {

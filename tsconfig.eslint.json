@@ -1,10 +1,8 @@
 {
+  "extends": "@tsconfig/node18",
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "esnext",
     "sourceMap": true,
     "declaration": true,
-    "lib": ["es5", "es6", "es7", "esnext"],
     "noUnusedLocals": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

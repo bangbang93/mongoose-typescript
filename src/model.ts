@@ -1,8 +1,8 @@
 import {IndexDirection, IndexOptions, SchemaOptions} from 'mongoose'
-import {getMongooseMeta, IMongooseClass, IPluginArgs} from './meta'
+import {getMongooseMeta, IPluginArgs} from './meta'
 
-export function model(name: string, options?: SchemaOptions) {
-  return (target: IMongooseClass): void => {
+export function model(name: string, options?: SchemaOptions): ClassDecorator {
+  return (target): void => {
     const meta = getMongooseMeta(target.prototype)
     meta.name = name
 
@@ -10,28 +10,30 @@ export function model(name: string, options?: SchemaOptions) {
   }
 }
 
-export function index(fields: Record<string, IndexDirection>, options?: IndexOptions) {
-  return (target: IMongooseClass): void => {
+export function index(fields: Record<string, IndexDirection>, options?: IndexOptions): ClassDecorator {
+  return (target): void => {
     getMongooseMeta(target.prototype).indexes
       .push({fields, options})
   }
 }
 
-export function subModel(options: SchemaOptions & {name?: string} = {}) {
-  return (target: IMongooseClass): void => {
+export function subModel(options: SchemaOptions & {name?: string} = {}): ClassDecorator {
+  return (target): void => {
     const meta = getMongooseMeta(target.prototype)
 
     if (options._id === undefined) {
       options._id = false
     }
-    meta.name = options.name
+    if (options.name) {
+      meta.name = options.name
+    }
     meta.options = options
   }
 }
 
-export function plugin<T>(plugin: IPluginArgs<T>['plugin'], options?: IPluginArgs<T>['options']) {
-  return (target: IMongooseClass): void => {
+export function plugin<T>(plugin: IPluginArgs<T>['plugin'], options?: IPluginArgs<T>['options']): ClassDecorator {
+  return (target): void => {
     getMongooseMeta(target.prototype).plugins
-      .push({plugin, options})
+      .push({plugin: plugin as any, options})
   }
 }

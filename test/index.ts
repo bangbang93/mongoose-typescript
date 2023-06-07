@@ -1,11 +1,10 @@
+import {get} from 'lodash'
 import * as mongoose from 'mongoose'
-import 'should'
+import should from 'should'
 import {
-  array, DocumentType, getModel, getModelName, getSchema, hidden, id, index, indexed, methods, middleware, Model, model,
-  ModelType, ObjectId, plugin, prop, Ref, ref, refArray, required, RichDocumentType, RichModelType, statics, subModel,
-  unique,
+  array, DocumentType, getModel, getModelName, getSchema, hidden, id, index, indexed, methods, middleware, model,
+  ObjectId, plugin, prop, Ref, ref, refArray, required, RichModelType, statics, subModel, unique,
 } from '../src'
-import should = require('should')
 
 mongoose.connect('mongodb://localhost/test')
 
@@ -15,10 +14,10 @@ function testPlugin(schema: mongoose.Schema, options: any) {
 
 @subModel()
 class Address {
-  @prop({maxlength: 10}) @required() public country: string
-  @prop() @required() public province: string
-  @prop() @required() public city: string
-  @prop() @required() public address: string
+  @prop({maxlength: 10}) @required() public country!: string
+  @prop() @required() public province!: string
+  @prop() @required() public city!: string
+  @prop() @required() public address!: string
 }
 
 enum AccountRole {
@@ -27,8 +26,8 @@ enum AccountRole {
 }
 @subModel()
 class Account {
-  @prop() @required() public name: string
-  @prop() public role: AccountRole
+  @prop() @required() public name!: string
+  @prop() public role!: AccountRole
 }
 
 let hookRun = 0
@@ -36,25 +35,25 @@ let hookRun = 0
 @model('some-string-id-model')
 class SomeStringIdModel {
   @id()
-  public readonly _id: string
+  public readonly _id!: string
 }
 getModelName(SomeStringIdModel).should.eql('some-string-id-model')
 
 @model('user')
-@middleware<User>('findOne', 'pre', () => hookRun++)
+@middleware<User>('findOne', 'pre', function findOneHook() {hookRun++})
 @plugin(testPlugin, {testPlugin: true})
-class User extends Model<User> {
-  @id() public readonly _id: mongoose.Types.ObjectId
+class User {
+  @id() public readonly _id!: mongoose.Types.ObjectId
 
-  @prop() @unique() @required() public username: string
-  @prop() @hidden() public password: string
-  @prop() @indexed() public loginCount: number
-  @array(Address) public addresses: Address[]
-  @prop() public account: Account
-  @ref(() => SomeStringIdModel, String) public someStringIdModel: Ref<SomeStringIdModel>
+  @prop() @unique() @required() public username!: string
+  @prop() @hidden() public password!: string
+  @prop() @indexed() public loginCount!: number
+  @array(Address) public addresses!: Address[]
+  @prop() public account!: Account
+  @ref(() => SomeStringIdModel, String) public someStringIdModel!: Ref<SomeStringIdModel>
 
   @statics()
-  public static async findByName(name: string): Promise<User> {
+  public static async findByName(this: RichModelType<typeof User>, name: string): Promise<User | null> {
     return this.findOne({username: name})
   }
 
@@ -68,22 +67,24 @@ getModelName(User).should.eql('user')
 
 @model('organization')
 @index({user: 1, name: 1}, {unique: true})
-class Organization extends Model<Organization> {
-  @id() public readonly _id: mongoose.Types.ObjectId
+class Organization {
+  @id() public readonly _id!: mongoose.Types.ObjectId
 
-  @ref(() => User, ObjectId) @required() public user: Ref<User>
-  @prop() @unique() @required() public name: string
-  @refArray(() => User, ObjectId) public members: Array<Ref<User>>
+  @ref(() => User, ObjectId) @required() public user!: Ref<User>
+  @prop() @unique() @required() public name!: string
+  @refArray(() => User, ObjectId) public members!: Array<Ref<User>>
 
   @statics()
-  public static async listByUser(userId: string): Promise<DocumentType<Organization>[]> {
+  public static async listByUser(this: RichModelType<typeof Organization>,
+    userId: string): Promise<DocumentType<Organization>[]> {
     return this.find({
       members: userId,
     })
   }
 
   @methods()
-  public async addMember(userId: mongoose.Types.ObjectId): Promise<this> {
+  public async addMember(this: DocumentType<Organization>,
+    userId: mongoose.Types.ObjectId): Promise<DocumentType<Organization>> {
     this.members.push(userId)
     return this.save()
   }
@@ -113,7 +114,7 @@ describe('User', () => {
       account: {
         name: 'aaa',
       },
-    }) as RichDocumentType<User>
+    })
 
     user.someStringIdModel = 'a'
 
@@ -131,8 +132,8 @@ describe('User', () => {
     })
 
     user.addresses[0].country.should.eql('china')
-    should(user.addresses.pull).not.undefined()
-    should(user.addresses[0].toObject).not.undefined()
+    should(get(user.addresses, 'pull')).not.undefined()
+    should(get(user.addresses[0], 'toObject')).not.undefined()
 
     await user.save().should
       .rejectedWith('user validation failed: addresses.0.province: Path `province` is required.')
@@ -148,12 +149,12 @@ describe('User', () => {
 })
 
 describe('organization', () => {
-  let OrganizationModel: ModelType<Organization>
+  let OrganizationModel: RichModelType<typeof Organization>
   it('getModel', () => {
     const OrganizationSchema = getSchema(Organization)
     OrganizationModel = getModel(Organization)
     OrganizationModel.should.ownProperty('listByUser')
-    OrganizationSchema['paths'].members['casterConstructor'].name.should.eql('ObjectId')
+    should(get(OrganizationSchema, 'paths.user.casterConstructor.name')).eql('ObjectID')
   })
 })
 
