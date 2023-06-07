@@ -3,7 +3,7 @@ import {Document, HydratedDocument, model, Model, Schema, Types} from 'mongoose'
 import 'reflect-metadata'
 import {Class, Constructor} from 'type-fest'
 
-import {Fn, getMongooseMeta, IMongooseClass, MongooseMeta} from './meta'
+import {Fn, getMongooseMeta, MongooseMeta} from './meta'
 import {ActionType, HookType} from './middleware'
 
 export * from './model'
@@ -32,7 +32,7 @@ export type RichModelType<T extends Constructor<object>, THelper = object> = Mod
 export type Ref<T extends {_id?: unknown}> = T['_id'] | T
 export type RefDocument<T extends {_id?: unknown}> = T['_id'] | DocumentType<T>
 
-const modelCache = new WeakMap<Class<unknown>, RichModelType<IMongooseClass>>()
+const modelCache = new WeakMap<Class<object>, Model<object>>()
 const schemaCache = new WeakMap<MongooseMeta, Schema>()
 
 export function getSchema<T>(modelClass: Class<T>): Schema {
@@ -51,9 +51,9 @@ export function getModel<T extends Constructor<object>>(modelClass: T): RichMode
   }
   const meta = getMongooseMeta(modelClass.prototype)
   if (!meta.name) throw new Error(`name not set for model ${modelClass.constructor.name}`)
-  const newModel = model(meta.name, getSchema(modelClass)) as unknown as RichModelType<T>
-  modelCache.set(modelClass, newModel as unknown as RichModelType<IMongooseClass>)
-  return newModel
+  const newModel = model(meta.name, getSchema(modelClass))
+  modelCache.set(modelClass, newModel)
+  return newModel as unknown as RichModelType<T>
 }
 
 export function getModelName<T extends Constructor<object>>(modelClass: T): string {

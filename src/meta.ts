@@ -1,5 +1,5 @@
-import {get, set} from 'lodash'
 import {IndexDirection, IndexOptions, Schema, SchemaOptions, SchemaTypeOptions} from 'mongoose'
+import {Constructor} from 'type-fest'
 import {ActionType, HookType} from './middleware'
 
 export type Fn = () => unknown
@@ -30,19 +30,21 @@ export class MongooseMeta {
   public options?: SchemaOptions = undefined
 }
 
-export const mongooseMeta = Symbol('MongooseMeta')
+const mongooseMeta = Symbol('MongooseMeta')
 
-export interface IMongooseClass extends Object {
-  [mongooseMeta]?: MongooseMeta
-
-  // eslint-disable-next-line @typescript-eslint/no-misused-new
-  new(...args: unknown[]): IMongooseClass
+export function setMongooseMeta(target: object, meta: Partial<MongooseMeta>): void {
+  const exists = Reflect.getMetadata(mongooseMeta, target) ?? new MongooseMeta()
+  Reflect.defineMetadata(mongooseMeta, {...exists, ...meta}, target)
 }
 
 export function getMongooseMeta(target: object): MongooseMeta {
-  if (!get(target, mongooseMeta)) {
-    set(target, mongooseMeta, new MongooseMeta())
-  }
+  const metadata = Reflect.getMetadata(mongooseMeta, target)
+  if (metadata) return metadata
+  const meta = new MongooseMeta()
+  Reflect.defineMetadata(mongooseMeta, meta, target)
+  return meta
+}
 
-  return get(target, mongooseMeta)
+export function hasMongooseMeta(target: object): target is Constructor<unknown> {
+  return Reflect.hasMetadata(mongooseMeta, target)
 }

@@ -1,8 +1,8 @@
 import lodash from 'lodash'
-import {DefaultType, Schema, SchemaTypeOptions, Types} from 'mongoose'
+import {DefaultType, SchemaTypeOptions} from 'mongoose'
 import {Constructor} from 'type-fest'
 import {getSchema, validators} from './index'
-import {getMongooseMeta, IMongooseClass, mongooseMeta} from './meta'
+import {getMongooseMeta, hasMongooseMeta} from './meta'
 import {getType} from './util'
 
 export function prop<T>(options: SchemaTypeOptions<T> = {},
@@ -17,29 +17,21 @@ export function prop<T>(options: SchemaTypeOptions<T> = {},
       type = getType(target, name) as object
     }
     if (typeof type === 'object' && type !== null && 'prototype' in type) {
-      if ((type.prototype as any)?.[mongooseMeta] && !pathSchema['type']) {
-        type = getSchema(type as IMongooseClass)
+      if (hasMongooseMeta(type) && !pathSchema['type']) {
+        type = getSchema(type)
       }
     }
     getMongooseMeta(target).schema[name] = {...pathSchema, ...options, ...type ? {type} : {}} as any
   }
 }
 
-export function array<T>(type: T, options?: SchemaTypeOptions<T[]>) {
+export function array<T extends Constructor<unknown>>(type: T, options?: SchemaTypeOptions<T[]>) {
   return (target: object, name: string): void => {
     let t
     if (typeof type === 'object' && type !== null) {
-      if ((lodash.get(type, 'prototype') as any)?.[mongooseMeta]) {
-        t = getSchema(type as unknown as IMongooseClass)
+      if (hasMongooseMeta(type)) {
+        t = getSchema(type)
       }
-      if ((lodash.get(type, 'type.prototype') as any)?.[mongooseMeta]) {
-        lodash.set(type, 'type', getSchema(lodash.get(type, 'type') as IMongooseClass))
-      }
-    }
-    const path = getMongooseMeta(target).schema[name]
-    if (!type) type = path['type'] as T
-    if (type === Types.ObjectId) {
-      t = Schema.Types.ObjectId
     }
     t = t ?? type
     getMongooseMeta(target).schema[name]
@@ -81,11 +73,13 @@ export function defaults<T extends DefaultType<unknown>>(value: T) {
   }
 }
 
-export function type(type: unknown) {
+export function type(type: Constructor<unknown>) {
   return (target: object, name: string) => {
     if (typeof type === 'object' && type !== null) {
-      if (lodash.get(type, 'prototype')?.[mongooseMeta]) {
-        type = getSchema(type as IMongooseClass)
+      if (hasMongooseMeta(type)) {
+        const schema = getSchema(type)
+        getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], type: schema}
+        return
       }
     }
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], type}
@@ -105,8 +99,8 @@ export function enums<T extends EnumValue>(values: Array<T> | Record<string | nu
 type LazyClass = () => Constructor<unknown>
 
 export function ref(nameOrClass: string | LazyClass, idType: unknown): (target: object, name: string) => void
-export function ref(nameOrClass: IMongooseClass, idType?: unknown): (target: object, name: string) => void
-export function ref(nameOrClass: string | IMongooseClass | LazyClass,
+export function ref(nameOrClass: Constructor<unknown>, idType?: unknown): (target: object, name: string) => void
+export function ref(nameOrClass: string | Constructor<unknown> | LazyClass,
   idType?: unknown): (target: object, name: string) => void {
   if (typeof nameOrClass === 'string') {
     return (target: object, name: string) => {
@@ -157,7 +151,7 @@ export function ref(nameOrClass: string | IMongooseClass | LazyClass,
   }
 }
 
-export function refArray(nameOrClass: string | LazyClass | IMongooseClass, elementType: unknown) {
+export function refArray(nameOrClass: string | LazyClass | Constructor<unknown>, elementType: unknown) {
   if (typeof nameOrClass === 'string') {
     return (target: object, name: string) => {
       getMongooseMeta(target).schema[name] = {
@@ -194,19 +188,19 @@ export function refArray(nameOrClass: string | LazyClass | IMongooseClass, eleme
 }
 
 export function statics() {
-  return (target: Constructor<object>, name: string, descriptor: PropertyDescriptor) => {
-    getMongooseMeta(target.prototype).statics[name] = descriptor.value
+  return (target: object, name: string, descriptor: PropertyDescriptor) => {
+    getMongooseMeta(target).statics[name] = descriptor.value
   }
 }
 
 export function query() {
-  return (target: Constructor<object>, name: string, descriptor: PropertyDescriptor) => {
-    getMongooseMeta(target.prototype).queries[name] = descriptor.value
+  return (target: object, name: string, descriptor: PropertyDescriptor) => {
+    getMongooseMeta(target).queries[name] = descriptor.value
   }
 }
 
 export function methods() {
-  return (target: Constructor<object>, name: string, descriptor: PropertyDescriptor) => {
+  return (target: object, name: string, descriptor: PropertyDescriptor) => {
     getMongooseMeta(target).methods[name] = descriptor.value
   }
 }
