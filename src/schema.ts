@@ -87,10 +87,13 @@ export function type(type: Constructor<unknown>) {
 }
 
 type EnumValue = string | number | null
-export function enums<T extends EnumValue>(values: Array<T> | Record<string | number, T>) {
+export function enums<T extends EnumValue>(values: Array<T> | Record<string | number, T>, allowNull = false) {
   return (target: object, name: string) => {
     if (!Array.isArray(values)) {
       values = Object.values(values)
+    }
+    if (allowNull) {
+      values.push(null as unknown as T)
     }
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], enum: values}
   }
