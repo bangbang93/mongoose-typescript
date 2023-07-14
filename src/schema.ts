@@ -25,7 +25,7 @@ export function prop<T>(options: SchemaTypeOptions<T> = {},
   }
 }
 
-export function array<T extends Constructor<unknown>>(type: T, options?: SchemaTypeOptions<T[]>) {
+export function array<T extends Constructor<unknown> | Array<unknown>>(type: T, options?: SchemaTypeOptions<T[]>) {
   return (target: object, name: string): void => {
     let t
     if (typeof type === 'object' && type !== null) {
