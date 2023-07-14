@@ -67,7 +67,7 @@ export function unique() {
   }
 }
 
-export function defaults<T extends DefaultType<unknown>>(value: T) {
+export function defaults<T extends DefaultType<unknown>>(value: T | null | undefined) {
   return (target: object, name: string) => {
     getMongooseMeta(target).schema[name] = {...getMongooseMeta(target).schema[name], default: value}
   }
