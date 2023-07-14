@@ -209,7 +209,7 @@ export function methods() {
 }
 
 export function virtual() {
-  return (target: Constructor<object>, name: string, descriptor: PropertyDescriptor) => {
+  return (target: object, name: string, descriptor: PropertyDescriptor) => {
     if (descriptor.value) {
       if (typeof descriptor.value !== 'function') {
         throw new TypeError('virtual can only used on class method or getter/setter')
