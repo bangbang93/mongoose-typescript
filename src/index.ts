@@ -69,7 +69,6 @@ export function forNestModule<T extends Constructor<object>>(modelClass: T): {na
 
 function buildSchema<T>(meta: MongooseMeta): Schema<T> {
   const schema = new Schema(meta.schema, meta.options)
-
   Object.assign(schema.statics, meta.statics)
   Object.assign(schema.methods, meta.methods)
   Object.assign(schema.query, meta.queries)

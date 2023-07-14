@@ -1,5 +1,5 @@
 import {get} from 'lodash'
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import should from 'should'
 import {
   array, DocumentType, getModel, getModelName, getSchema, hidden, id, index, indexed, methods, middleware, model,
@@ -153,8 +153,8 @@ describe('organization', () => {
   it('getModel', () => {
     const OrganizationSchema = getSchema(Organization)
     OrganizationModel = getModel(Organization)
-    OrganizationModel.should.ownProperty('listByUser')
-    should(get(OrganizationSchema, 'paths.user.casterConstructor.name')).eql('ObjectID')
+    should(OrganizationModel.listByUser).not.undefined()
+    should(get(OrganizationSchema, 'paths.user.instance')).eql('ObjectID')
   })
 })
 

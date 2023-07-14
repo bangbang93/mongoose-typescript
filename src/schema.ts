@@ -1,6 +1,6 @@
 import lodash from 'lodash'
 import {DefaultType, SchemaTypeOptions} from 'mongoose'
-import {Constructor} from 'type-fest'
+import {Class, Constructor} from 'type-fest'
 import {getSchema, validators} from './index'
 import {getMongooseMeta, hasMongooseMeta} from './meta'
 import {getType} from './util'
@@ -16,9 +16,9 @@ export function prop<T>(options: SchemaTypeOptions<T> = {},
     if (!type) {
       type = getType(target, name) as object
     }
-    if (typeof type === 'object' && type !== null && 'prototype' in type) {
-      if (hasMongooseMeta(type) && !pathSchema['type']) {
-        type = getSchema(type)
+    if (typeof type === 'function' && 'prototype' in type) {
+      if (hasMongooseMeta(type.prototype) && !pathSchema['type']) {
+        type = getSchema(type as Class<unknown>)
       }
     }
     getMongooseMeta(target).schema[name] = {...pathSchema, ...options, ...type ? {type} : {}} as any
@@ -28,8 +28,8 @@ export function prop<T>(options: SchemaTypeOptions<T> = {},
 export function array<T extends Constructor<unknown> | Array<unknown>>(type: T, options?: SchemaTypeOptions<T[]>) {
   return (target: object, name: string): void => {
     let t
-    if (typeof type === 'object' && type !== null) {
-      if (hasMongooseMeta(type)) {
+    if (typeof type === 'function') {
+      if (hasMongooseMeta(type.prototype)) {
         t = getSchema(type)
       }
     }
@@ -191,8 +191,8 @@ export function refArray(nameOrClass: string | LazyClass | Constructor<unknown>,
 }
 
 export function statics() {
-  return (target: object, name: string, descriptor: PropertyDescriptor) => {
-    getMongooseMeta(target).statics[name] = descriptor.value
+  return (target: Class<unknown>, name: string, descriptor: PropertyDescriptor) => {
+    getMongooseMeta(target.prototype).statics[name] = descriptor.value
   }
 }
 
