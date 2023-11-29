@@ -30,7 +30,7 @@
     "decrator"
   ],
   "peerDependencies": {
-    "mongoose": "^6.2.1 || ^7.0.0"
+    "mongoose": ">=6.2.1 <9.0.0"
   },
   "devDependencies": {
     "@bangbang93/eslint-config-recommended": "^0.0.3",

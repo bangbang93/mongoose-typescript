@@ -154,7 +154,7 @@ describe('organization', () => {
     const OrganizationSchema = getSchema(Organization)
     OrganizationModel = getModel(Organization)
     should(OrganizationModel.listByUser).not.undefined()
-    should(get(OrganizationSchema, 'paths.user.instance')).eql('ObjectID')
+    should(get(OrganizationSchema, 'paths.user.instance')).eql('ObjectId')
   })
 })
 
