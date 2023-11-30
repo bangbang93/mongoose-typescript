@@ -51,6 +51,7 @@ class User {
   @array(Address) public addresses!: Address[]
   @prop() public account!: Account
   @ref(() => SomeStringIdModel, String) public someStringIdModel!: Ref<SomeStringIdModel>
+  @prop() type!: string
 
   @statics()
   public static async findByName(this: RichModelType<typeof User>, name: string): Promise<User | null> {

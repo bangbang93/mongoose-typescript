@@ -28,7 +28,7 @@ export function subModel(options: SchemaOptions & {name?: string} = {}): ClassDe
       meta.name = options.name
     }
     meta.options = options
-    meta.clazz = target.prototype
+    meta.clazz = target
   }
 }
 
