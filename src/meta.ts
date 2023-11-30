@@ -18,6 +18,8 @@ export interface IPluginArgs<T> {
 
 export class MongooseMeta {
   public name!: string
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  public clazz!: Function
   public schema: Record<string, SchemaTypeOptions<unknown>> = {}
   public statics: {[name: string]: Fn} = {}
   public methods: {[name: string]: Fn} = {}

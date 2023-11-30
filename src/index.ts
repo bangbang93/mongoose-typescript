@@ -72,6 +72,7 @@ function buildSchema<T>(meta: MongooseMeta): Schema<T> {
   Object.assign(schema.statics, meta.statics)
   Object.assign(schema.methods, meta.methods)
   Object.assign(schema.query, meta.queries)
+  schema.loadClass(meta.clazz)
 
 
   Object.keys(meta.virtuals)

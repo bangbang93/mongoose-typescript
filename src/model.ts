@@ -5,8 +5,8 @@ export function model(name: string, options?: SchemaOptions): ClassDecorator {
   return (target): void => {
     const meta = getMongooseMeta(target.prototype)
     meta.name = name
-
     meta.options = options
+    meta.clazz = target
   }
 }
 
@@ -28,6 +28,7 @@ export function subModel(options: SchemaOptions & {name?: string} = {}): ClassDe
       meta.name = options.name
     }
     meta.options = options
+    meta.clazz = target.prototype
   }
 }
 
