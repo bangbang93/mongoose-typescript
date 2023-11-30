@@ -2,8 +2,8 @@ import {get} from 'lodash'
 import mongoose from 'mongoose'
 import should from 'should'
 import {
-  array, DocumentType, getModel, getModelName, getSchema, hidden, id, index, indexed, methods, middleware, model,
-  ObjectId, plugin, prop, Ref, ref, refArray, required, RichModelType, statics, subModel, unique,
+  array, DocumentType, getModel, getModelName, getSchema, hidden, id, index, indexed, middleware, model, ObjectId,
+  plugin, prop, Ref, ref, refArray, required, RichModelType, subModel, unique,
 } from '../src'
 
 mongoose.connect('mongodb://localhost/test')
@@ -53,12 +53,10 @@ class User {
   @ref(() => SomeStringIdModel, String) public someStringIdModel!: Ref<SomeStringIdModel>
   @prop() type!: string
 
-  @statics()
   public static async findByName(this: RichModelType<typeof User>, name: string): Promise<User | null> {
     return this.findOne({username: name})
   }
 
-  @methods()
   public addAddress(address: Address): this {
     this.addresses.push(address)
     return this
@@ -75,7 +73,6 @@ class Organization {
   @prop() @unique() @required() public name!: string
   @refArray(() => User, ObjectId) public members!: Array<Ref<User>>
 
-  @statics()
   public static async listByUser(this: RichModelType<typeof Organization>,
     userId: string): Promise<DocumentType<Organization>[]> {
     return this.find({
@@ -83,7 +80,6 @@ class Organization {
     })
   }
 
-  @methods()
   public async addMember(this: DocumentType<Organization>,
     userId: mongoose.Types.ObjectId): Promise<DocumentType<Organization>> {
     this.members.push(userId)
