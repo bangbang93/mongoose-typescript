@@ -192,6 +192,7 @@ export function refArray(nameOrClass: string | LazyClass | Constructor<unknown>,
   }
 }
 
+/** @deprecated can be auto loaded */
 export function statics() {
   return (target: Class<unknown>, name: string, descriptor: PropertyDescriptor) => {
     getMongooseMeta(target.prototype).statics[name] = descriptor.value
@@ -204,12 +205,14 @@ export function query() {
   }
 }
 
+/** @deprecated can be auto loaded */
 export function methods() {
   return (target: object, name: string, descriptor: PropertyDescriptor) => {
     getMongooseMeta(target).methods[name] = descriptor.value
   }
 }
 
+/** @deprecated can be auto loaded */
 export function virtual() {
   return (target: object, name: string, descriptor: PropertyDescriptor) => {
     if (descriptor.value) {
