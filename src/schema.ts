@@ -21,6 +21,14 @@ export function prop<T>(options: SchemaTypeOptions<T> = {},
         type = getSchema(type as Class<unknown>)
       }
     }
+    if (options.of) {
+      const of = options.of
+      if (typeof of === 'function' && 'prototype' in of) {
+        if (hasMongooseMeta(of.prototype)) {
+          options.of = getSchema(of as Class<unknown>)
+        }
+      }
+    }
     getMongooseMeta(target).schema[name] = {...pathSchema, ...options, ...type ? {type} : {}} as any
   }
 }
@@ -34,6 +42,14 @@ export function array<T extends Constructor<unknown> | Array<unknown>>(type: T, 
       }
     }
     t = t ?? type
+    if (options?.of) {
+      const of = options.of
+      if (typeof of === 'function' && 'prototype' in of) {
+        if (hasMongooseMeta(of.prototype)) {
+          options.of = getSchema(of as Class<unknown>)
+        }
+      }
+    }
     getMongooseMeta(target).schema[name]
       = {...getMongooseMeta(target).schema[name], ...options, type: t ? [t] : []} as any
   }
