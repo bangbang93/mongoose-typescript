@@ -36,7 +36,7 @@ const mongooseMeta = Symbol('MongooseMeta')
 
 export function setMongooseMeta(target: object, meta: Partial<MongooseMeta>): void {
   const exists = Reflect.getMetadata(mongooseMeta, target) ?? new MongooseMeta()
-  Reflect.defineMetadata(mongooseMeta, {...exists, ...meta}, target)
+  Object.assign(exists, meta)
 }
 
 export function getMongooseMeta(target: object): MongooseMeta {
