@@ -1,5 +1,5 @@
 import {Primitive} from '@sindresorhus/is'
-import {Document, HydratedDocument, model, Model, Schema, Types} from 'mongoose'
+import {CompileModelOptions, Document, HydratedDocument, model, Model, Schema, Types} from 'mongoose'
 import 'reflect-metadata'
 import {Class, Constructor} from 'type-fest'
 
@@ -45,13 +45,17 @@ export function getSchema<T>(modelClass: Class<T>): Schema {
   return schema
 }
 
-export function getModel<T extends Constructor<object>>(modelClass: T): RichModelType<T> {
+interface IGetModelParams extends CompileModelOptions {
+  collection?: string
+}
+
+export function getModel<T extends Constructor<object>>(modelClass: T, params?: IGetModelParams): RichModelType<T> {
   if (modelCache.has(modelClass)) {
     return modelCache.get(modelClass) as unknown as RichModelType<T>
   }
   const meta = getMongooseMeta(modelClass.prototype)
   if (!meta.name) throw new Error(`name not set for model ${modelClass.constructor.name}`)
-  const newModel = model(meta.name, getSchema(modelClass))
+  const newModel = model(meta.name, getSchema(modelClass), params?.collection, params)
   modelCache.set(modelClass, newModel)
   return newModel as unknown as RichModelType<T>
 }
