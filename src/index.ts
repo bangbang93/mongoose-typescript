@@ -32,7 +32,7 @@ export type RichModelType<T extends Constructor<object>, THelper = object> = Mod
 export type Ref<T extends {_id?: unknown}> = T['_id'] | T
 export type RefDocument<T extends {_id?: unknown}> = T['_id'] | DocumentType<T>
 
-const modelCache = new WeakMap<Class<object>, Model<object>>()
+const modelCache = new WeakMap<Class<object>, Model<any>>()
 const schemaCache = new WeakMap<MongooseMeta, Schema>()
 
 export function getSchema<T>(modelClass: Class<T>): Schema {

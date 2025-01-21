@@ -1,4 +1,3 @@
-import lodash from 'lodash'
 import {DefaultType, SchemaTypeOptions} from 'mongoose'
 import {Class, Constructor} from 'type-fest'
 import {getSchema, validators} from './index'
@@ -133,14 +132,14 @@ export function ref(nameOrClass: string | Constructor<unknown> | LazyClass,
         throw new Error(`${target.constructor.name}.${name} reference type is undefined, maybe circular dependence`)
       }
       const field = getMongooseMeta(target).schema[name] || {}
-      const isArray = Array.isArray(field['type'])
-      if (field['type'] === undefined || idType || isArray && (lodash.get(field, 'type') as any)?.[0] === undefined) {
+      const fieldType = field['type']
+      if (fieldType === undefined || idType || Array.isArray(fieldType) && fieldType[0] === undefined) {
         const type = idType || getType(nameOrClass.prototype, '_id')
         if (!type) {
           throw new Error(`cannot get type for ref ${target.constructor.name}.${name} `
                           + `to ${nameOrClass.constructor.name}._id`)
         }
-        if (isArray) {
+        if (Array.isArray(fieldType)) {
           field['type'] = [type]
         } else {
           field['type'] = type
@@ -151,11 +150,11 @@ export function ref(nameOrClass: string | Constructor<unknown> | LazyClass,
   } else {
     return (target: object, name: string) => {
       const field = getMongooseMeta(target).schema[name] || {}
-      const isArray = Array.isArray(field['type'])
-      if (isArray && !Array.isArray(idType)) {
+      const fieldType = field['type']
+      if (Array.isArray(fieldType) && !Array.isArray(idType)) {
         idType = [idType]
       }
-      if (field['type'] === undefined || idType || isArray && (lodash.get(field, 'type') as any)?.[0] === undefined) {
+      if (fieldType === undefined || idType || Array.isArray(fieldType) && fieldType[0] === undefined) {
         getMongooseMeta(target).schema[name] = {...field,
           type: idType,
           ref: () => {
