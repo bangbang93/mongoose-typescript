@@ -8,7 +8,7 @@ export function prop<T>(options: SchemaTypeOptions<T> = {},
   type?: SchemaTypeOptions<unknown>['type']): PropertyDecorator {
   return (target: object, name: string | symbol) => {
     if (typeof name === 'symbol') {
-      throw new Error('Symbol is not supported as property name')
+      throw new TypeError('Symbol is not supported as property name')
     }
     const pathSchema = getMongooseMeta(target).schema[name] || {} as SchemaTypeOptions<T>
     type = type ?? pathSchema.type ?? options.type
@@ -210,7 +210,7 @@ export function refArray(nameOrClass: string | LazyClass | Constructor<unknown>,
 /** @deprecated can be auto loaded */
 export function statics() {
   return (target: Class<unknown>, name: string, descriptor: PropertyDescriptor) => {
-    getMongooseMeta(target.prototype).statics[name] = descriptor.value
+    getMongooseMeta(target.prototype as object).statics[name] = descriptor.value
   }
 }
 

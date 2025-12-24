@@ -36,7 +36,7 @@ const modelCache = new WeakMap<Class<object>, Model<any>>()
 const schemaCache = new WeakMap<MongooseMeta, Schema>()
 
 export function getSchema<T>(modelClass: Class<T>): Schema {
-  const meta = getMongooseMeta(modelClass.prototype)
+  const meta = getMongooseMeta(modelClass.prototype as object)
   let schema = schemaCache.get(meta)
   if (schema) return schema
 
