@@ -1,5 +1,4 @@
 import {Aggregate, Document, Model, Query} from 'mongoose'
-import {DocumentType} from './index'
 import {Fn, getMongooseMeta} from './meta'
 
 export type HookType = 'pre' | 'post'
@@ -14,27 +13,34 @@ export type ActionType = DocumentMiddlewareType | QueryMiddlewareType | Aggregat
 
 
 type R<T> = T | Promise<T>
-type DocumentHookFunction<T> = (this: DocumentType<T>, error?: Error, doc?: DocumentType<T>, next?: Fn) => R<unknown>
-type QueryHookFunction<T, Doc = DocumentType<T>> =
-  (this: Query<Doc, T>, error?: Error, doc?: Query<Doc, T>, next?: Fn) => R<unknown>
-type AggregateHookFunction<T> = (this: Aggregate<T>, error?: Error, doc?: Aggregate<T>, next?: Fn) => R<unknown>
-type ModelHookFunction<T extends Document> = (this: Model<T>, error?: Error, doc?: Model<T>, next?: Fn) => R<unknown>
-type HookFunction<T> = T extends Document ? ModelHookFunction<T> | QueryHookFunction<T>
-  : DocumentHookFunction<T> | AggregateHookFunction<T>
+type DocumentHookFunction = (this: Document, error?: Error, doc?: Document, next?: Fn) => R<unknown>
+type QueryHookFunction = (this: Query<unknown, unknown>, error?: Error, doc?: Query<unknown, unknown>,
+  next?: Fn,
+) => R<unknown>
+type AggregateHookFunction = (this: Aggregate<unknown>, error?: Error, doc?: Aggregate<unknown>,
+  next?: Fn,
+) => R<unknown>
+type ModelHookFunction = (this: Model<Document>, error?: Error, doc?: Model<Document>, next?: Fn) => R<unknown>
+type HookFunction = DocumentHookFunction | QueryHookFunction | AggregateHookFunction | ModelHookFunction
 
 
-export function middleware<T>(actionType: DocumentMiddlewareType, hookType: HookType,
-  hookFunction: DocumentHookFunction<T>): ClassDecorator
-export function middleware<T>(actionType: QueryMiddlewareType, hookType: HookType,
-  hookFunction: QueryHookFunction<T>): ClassDecorator
-export function middleware<T>(actionType: AggregateMiddlewareType, hookType: HookType,
-  hookFunction: AggregateHookFunction<T>): ClassDecorator
-export function middleware<T extends Document>(actionType: ModelMiddlewareType, hookType: HookType,
-  hookFunction: ModelHookFunction<T>): ClassDecorator
-export function middleware<T>(actionType: ActionType, hookType: HookType,
-  hookFunction: HookFunction<T>): ClassDecorator {
+export function middleware(actionType: DocumentMiddlewareType, hookType: HookType,
+  hookFunction: DocumentHookFunction,
+): ClassDecorator
+export function middleware(actionType: QueryMiddlewareType, hookType: HookType,
+  hookFunction: QueryHookFunction,
+): ClassDecorator
+export function middleware(actionType: AggregateMiddlewareType, hookType: HookType,
+  hookFunction: AggregateHookFunction,
+): ClassDecorator
+export function middleware(actionType: ModelMiddlewareType, hookType: HookType,
+  hookFunction: ModelHookFunction,
+): ClassDecorator
+export function middleware(actionType: ActionType, hookType: HookType,
+  hookFunction: HookFunction,): ClassDecorator {
   return (target): void => {
-    getMongooseMeta(target.prototype).middleware
+    getMongooseMeta(target.prototype)
+      .middleware
       .push([actionType, hookType, hookFunction])
   }
 }

@@ -5,7 +5,7 @@ export default {
   get mongoId() {
     return (value: unknown): boolean => {
       if (is.nullOrUndefined(value)) return true
-      if (is.string(value) || is.number(value)) {
+      if (is.string(value)) {
         return ObjectId.isValid(value)
       }
       if (is.directInstanceOf(value, ObjectId)) {
