@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@sindresorhus/is": "^4.2.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "reflect-metadata": "^0.1.13",
     "type-fest": "^2.11.1"
   },
