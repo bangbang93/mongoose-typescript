@@ -41,7 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^5.59.9",
     "@typescript-eslint/parser": "^5.59.9",
     "eslint": "^8.42.0",
-    "mocha": "^11.1.0",
+    "mocha": "^12.0.3",
     "should": "^13.2.3",
     "ts-node": "^8.10.2",
     "typedoc": "^0.28.17",
